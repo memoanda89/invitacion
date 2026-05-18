@@ -238,6 +238,7 @@
     .gal-item img{ opacity:1 }
   }
 </style>
+<script src="config.js"></script>
 </head>
 <body>
 
@@ -264,11 +265,23 @@
 </footer>
 
 <script>
-// Generar lista de fotos (s01..s56 + s58, omitiendo s57 que no existe)
-const photos = [];
-for (let i = 1; i <= 58; i++){
-  if (i === 57) continue;
-  photos.push(`assets/fotos/s${String(i).padStart(2,'0')}.jpg`);
+// Si hay CONFIG con galería personalizada, úsala. Si no, genera todas las fotos del rango.
+let photos;
+if (typeof CONFIG !== 'undefined' && CONFIG.photos && Array.isArray(CONFIG.photos.allGallery)) {
+  photos = CONFIG.photos.allGallery;
+} else {
+  photos = [];
+  for (let i = 1; i <= 58; i++){
+    if (i === 57) continue;
+    photos.push(`assets/fotos/s${String(i).padStart(2,'0')}.jpg`);
+  }
+}
+
+// Actualizar nombres en header
+if (typeof CONFIG !== 'undefined' && CONFIG.couple) {
+  document.title = `Galería · ${CONFIG.couple.bride} & ${CONFIG.couple.groom}`;
+  const footerP = document.querySelector('.gal-footer p');
+  if (footerP) footerP.textContent = `${CONFIG.couple.bride} & ${CONFIG.couple.groom} · ${CONFIG.date.long}`;
 }
 
 const grid = document.getElementById('grid');

@@ -13,17 +13,17 @@
 <meta property="og:site_name" content="Sandy &amp; Memo" />
 <meta property="og:title" content="Sandy &amp; Memo · 17 de Octubre, 2026" />
 <meta property="og:description" content="Tenemos el honor de invitarte a celebrar con nosotros nuestra boda. 17 de octubre, 2026." />
-<meta property="og:image" content="https://memoanda89.github.io/invitacion/assets/og-preview.jpg" />
+<meta property="og:image" content="https://sandyymemo.com/assets/og-preview.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="Sandy y Memo · invitación de boda" />
-<meta property="og:url" content="https://memoanda89.github.io/invitacion/" />
+<meta property="og:url" content="https://sandyymemo.com/" />
 
 <!-- Twitter Cards -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Sandy &amp; Memo · 17 de Octubre, 2026" />
 <meta name="twitter:description" content="Tenemos el honor de invitarte a celebrar con nosotros nuestra boda. 17 de octubre, 2026." />
-<meta name="twitter:image" content="https://memoanda89.github.io/invitacion/assets/og-preview.jpg" />
+<meta name="twitter:image" content="https://sandyymemo.com/assets/og-preview.jpg" />
 
 <!-- Apple Touch & favicons -->
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
@@ -34,6 +34,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Tenor+Sans&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
 
 <link rel="preload" as="image" href="assets/fotos/s56.jpg" fetchpriority="high" />
+
+<!-- Configuración centralizada (edita este archivo para cambiar contenido) -->
+<script src="config.js"></script>
 
 <!-- Libs externas para Pase Digital -->
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -1445,13 +1448,7 @@
     transition-delay: .25s;
     z-index:1;
   }
-  .envelope.opening .env-letter{
-    opacity:1;
-    transform: translateY(-46%) scale(1.16);
-    transition-delay: .9s;
-    z-index:8;
-    box-shadow: 0 24px 60px rgba(62,51,39,.18);
-  }
+
   .envelope.opening + .env-hint{
     opacity:0;
     transition: opacity .4s;
@@ -1686,24 +1683,17 @@
 <div class="envelope-overlay" id="envelopeOverlay" role="dialog" aria-modal="true" aria-label="Abrir invitación">
   <div class="envelope" id="envelope" tabindex="0" role="button" aria-label="Toca para abrir la invitación">
     <div class="env-body"></div>
-    <div class="env-letter">
-      <div class="env-letter-inner">
-        <p class="small">Invitación</p>
-        <p class="names">Sandy<span class="amp">&amp;</span>Memo</p>
-        <p class="date">17 · X · 2026</p>
-      </div>
-    </div>
     <div class="env-front"></div>
     <div class="env-flap"></div>
-    <div class="env-seal">S&amp;M</div>
+    <div class="env-seal" id="envSeal">S&amp;M</div>
   </div>
   <p class="env-hint">Toca para abrir</p>
 </div>
 
 <!-- ============ MÚSICA DE FONDO ============ -->
 <audio id="bgMusic" loop preload="auto">
-  <source src="assets/musica.mp3" type="audio/mpeg" />
-  <source src="assets/musica.ogg" type="audio/ogg" />
+  <source id="musicMp3" src="assets/musica.mp3" type="audio/mpeg" />
+  <source id="musicOgg" src="assets/musica.ogg" type="audio/ogg" />
 </audio>
 
 <button class="music-toggle" id="musicToggle" aria-label="Activar o silenciar música de fondo" type="button">
@@ -1731,7 +1721,7 @@
 
 <!-- ============ 1. HERO ============ -->
 <section class="hero" id="hero">
-  <img class="hero-photo" src="assets/fotos/s56.jpg" alt="Sandy y Memo" width="1024" height="1536" fetchpriority="high" />
+  <img class="hero-photo" id="heroPhoto" src="assets/fotos/s56.jpg" alt="Sandy y Memo" width="1024" height="1536" fetchpriority="high" />
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <p class="hero-intro">Tenemos el honor</p>
@@ -1741,8 +1731,8 @@
       <span id="nameB">Memo</span>
     </h1>
     <div class="hero-divider"></div>
-    <p class="hero-date">17 · Octubre · <strong>2026</strong></p>
-    <p class="hero-meta">Ceremonia 6:00 pm<span class="dot"></span>Recepción 8:30 pm</p>
+    <p class="hero-date" id="heroDate">17 · Octubre · <strong>2026</strong></p>
+    <p class="hero-meta" id="heroMeta">Ceremonia 6:00 pm<span class="dot"></span>Recepción 8:30 pm</p>
   </div>
   
 </section>
@@ -1754,9 +1744,9 @@
       <p class="eyebrow">Nuestra historia</p>
     </div>
     <div class="story-text">
-      <p class="reveal d1">Hay encuentros que cambian el rumbo en silencio. El nuestro tuvo café, conversaciones largas y la certeza —desde muy temprano— de que la vida iba a ser más amable de la mano.</p>
-      <p class="italic reveal d2">"Donde tú estás, también está mi casa."</p>
-      <p class="reveal d3">Hoy queremos celebrar este momento rodeados de las personas que han caminado con nosotros. Tu presencia hará que este día sea irrepetible.</p>
+      <p class="reveal d1" id="storyP1">Hay encuentros que cambian el rumbo en silencio. El nuestro tuvo café, conversaciones largas y la certeza —desde muy temprano— de que la vida iba a ser más amable de la mano.</p>
+      <p class="italic reveal d2" id="storyQuote">"Donde tú estás, también está mi casa."</p>
+      <p class="reveal d3" id="storyP2">Hoy queremos celebrar este momento rodeados de las personas que han caminado con nosotros. Tu presencia hará que este día sea irrepetible.</p>
     </div>
   </div>
 </section>
@@ -1770,18 +1760,18 @@
       <div class="divider-camel reveal d2"></div>
     </div>
     <div class="events-grid">
-      <div class="event-card reveal">
-        <div class="icon">✦</div>
-        <h3>Ceremonia</h3>
-        <p class="meta">6:00 pm</p>
-        <p class="venue">Catedral de San Gabriel<br/>Av. Reforma 120, Centro Histórico</p>
+      <div class="event-card reveal" id="ceremonyCard">
+        <div class="icon" id="ceremonyIcon">✦</div>
+        <h3 id="ceremonyTitle">Ceremonia</h3>
+        <p class="meta" id="ceremonyTime">6:00 pm</p>
+        <p class="venue" id="ceremonyVenue">Catedral de San Gabriel<br/>Av. Reforma 120, Centro Histórico</p>
         <a href="#ubicacion" class="btn-ghost">Ver ubicación</a>
       </div>
-      <div class="event-card reveal d2">
-        <div class="icon">❦</div>
-        <h3>Recepción</h3>
-        <p class="meta">8:30 pm</p>
-        <p class="venue">Hacienda Los Robles<br/>Camino al Lago 45, Valle del Sol</p>
+      <div class="event-card reveal d2" id="receptionCard">
+        <div class="icon" id="receptionIcon">❦</div>
+        <h3 id="receptionTitle">Recepción</h3>
+        <p class="meta" id="receptionTime">8:30 pm</p>
+        <p class="venue" id="receptionVenue">Hacienda Los Robles<br/>Camino al Lago 45, Valle del Sol</p>
         <a href="#ubicacion" class="btn-ghost">Ver ubicación</a>
       </div>
     </div>
@@ -1795,15 +1785,15 @@
       <p class="eyebrow reveal">Ubicación</p>
       <h2 class="section-title reveal d1">Te esperamos aquí</h2>
       <div class="divider-camel reveal d2"></div>
-      <p class="section-subtitle reveal d3">Hacienda Los Robles · Camino al Lago 45, Valle del Sol. Estacionamiento valet disponible.</p>
+      <p class="section-subtitle reveal d3" id="mapSubtitle">Hacienda Los Robles · Camino al Lago 45, Valle del Sol. Estacionamiento valet disponible.</p>
     </div>
     <div class="map-frame reveal d4">
       <div class="map-grid"></div>
       <div class="map-pin">✦</div>
       <div class="map-cta">
-        <a href="https://www.google.com/maps/search/?api=1&query=Valle+del+Sol" target="_blank" rel="noopener">Google Maps</a>
-        <a href="https://maps.apple.com/?q=Valle+del+Sol" target="_blank" rel="noopener">Apple Maps</a>
-        <a href="https://www.waze.com/ul?q=Valle+del+Sol" target="_blank" rel="noopener">Waze</a>
+        <a id="mapGoogle" href="https://www.google.com/maps/search/?api=1&query=Valle+del+Sol" target="_blank" rel="noopener">Google Maps</a>
+        <a id="mapApple" href="https://maps.apple.com/?q=Valle+del+Sol" target="_blank" rel="noopener">Apple Maps</a>
+        <a id="mapWaze" href="https://www.waze.com/ul?q=Valle+del+Sol" target="_blank" rel="noopener">Waze</a>
       </div>
     </div>
   </div>
@@ -1811,7 +1801,7 @@
 
 <!-- ============ 5. FOTO DESTACADA (26) ============ -->
 <section class="feature-photo">
-  <img src="assets/fotos/s26.jpg" alt="Sandy y Memo" loading="lazy" class="reveal" />
+  <img id="featurePhoto" src="assets/fotos/s26.jpg" alt="Sandy y Memo" loading="lazy" class="reveal" />
 </section>
 
 <!-- ============ 6. CUENTA REGRESIVA ============ -->
@@ -1848,8 +1838,8 @@
   <div class="container narrow">
     <div class="dress-row reveal">
       <p class="dress-label">Código de vestimenta</p>
-      <h3 class="dress-title">Formal elegante</h3>
-      <p class="dress-note">Vestido largo o midi en tonos cálidos. Traje formal oscuro para caballeros. Te pedimos reservar el color blanco para la novia.</p>
+      <h3 class="dress-title" id="dressTitle">Formal elegante</h3>
+      <p class="dress-note" id="dressNote">Vestido largo o midi en tonos cálidos. Traje formal oscuro para caballeros. Te pedimos reservar el color blanco para la novia.</p>
       <div class="dress-swatches">
         <div class="swatch-mini"><div class="dot" style="background:#3E3327"></div><span>Espresso</span></div>
         <div class="swatch-mini"><div class="dot" style="background:#5C1A2B"></div><span>Burdeos</span></div>
@@ -1869,7 +1859,7 @@
       <h2 class="section-title reveal d1">Momentos del camino</h2>
       <div class="divider-camel reveal d2"></div>
     </div>
-    <div class="gallery-grid reveal d3">
+    <div class="gallery-grid reveal d3" id="galleryGrid">
       <div class="gallery-item"><img src="assets/fotos/s02.jpg" alt="" loading="lazy" /></div>
       <div class="gallery-item"><img src="assets/fotos/s10.jpg" alt="" loading="lazy" /></div>
       <div class="gallery-item"><img src="assets/fotos/s19.jpg" alt="" loading="lazy" /></div>
@@ -1901,7 +1891,7 @@
       <div class="divider-camel reveal d2"></div>
       <p class="section-subtitle reveal d3">Hemos reservado un bloque de habitaciones con tarifa especial. Solicítala al hacer tu reserva mencionando el código.</p>
     </div>
-    <div class="lodging-grid">
+    <div class="lodging-grid" id="lodgingGrid">
       <div class="lodging-card reveal">
         <p class="tag">Opción 1</p>
         <h3>Hotel Hacienda Real</h3>
@@ -1927,7 +1917,7 @@
       <p class="eyebrow reveal">Confirmación</p>
       <h2 class="section-title reveal d1">Sella tu asistencia</h2>
       <div class="divider-camel reveal d2"></div>
-      <p class="section-subtitle reveal d3">Por favor confirma antes del <strong style="color:var(--camel-deep)">1 de septiembre de 2026</strong>.</p>
+      <p class="section-subtitle reveal d3">Por favor confirma antes del <strong style="color:var(--camel-deep)" id="rsvpDeadline">1 de septiembre de 2026</strong>.</p>
     </div>
 
     <div class="rsvp-wrapper reveal d4">
@@ -1987,7 +1977,7 @@
         <div class="rsvp-success">
           <div class="seal">S&amp;M</div>
           <h3>Tu lugar está reservado</h3>
-          <p class="lead">Gracias por confirmar. Te esperamos el <strong style="color:var(--camel-deep)">17 de octubre, 6:00 pm</strong>.</p>
+          <p class="lead">Gracias por confirmar. Te esperamos el <strong style="color:var(--camel-deep)" id="successDate">17 de octubre, 6:00 pm</strong>.</p>
           <div class="success-cta">
             <a href="#pase" class="btn primary"><span>Ver mi pase</span></a>
             <button class="btn" id="addCalendar"><span>Agregar al calendario</span></button>
@@ -2030,11 +2020,11 @@
           </div>
           <div class="pass-row">
             <span class="pass-key">Fecha</span>
-            <span class="pass-val">17 · Oct · 2026</span>
+            <span class="pass-val" id="passDate">17 · Oct · 2026</span>
           </div>
           <div class="pass-row">
             <span class="pass-key">Hora</span>
-            <span class="pass-val">18:00 hrs</span>
+            <span class="pass-val" id="passHour">18:00 hrs</span>
           </div>
           <div class="pass-row">
             <span class="pass-key">Mesa</span>
@@ -2042,7 +2032,7 @@
           </div>
           <div class="pass-row">
             <span class="pass-key">Lugar</span>
-            <span class="pass-val">Hacienda Los Robles</span>
+            <span class="pass-val" id="passVenue">Hacienda Los Robles</span>
           </div>
         </div>
         <div class="pass-divider dashed"></div>
@@ -2071,7 +2061,7 @@
       <div class="divider-camel reveal d2"></div>
       <p class="section-subtitle reveal d3">Tu presencia es nuestro mejor regalo. Si además quieres consentirnos, dejamos estas opciones a tu disposición.</p>
     </div>
-    <div class="gifts-grid reveal d4">
+    <div class="gifts-grid reveal d4" id="giftsGrid">
       <a class="gift-card" href="https://mesaderegalos.liverpool.com.mx/" target="_blank" rel="noopener">
         <div class="gift-brand">Liverpool</div>
         <div class="gift-code">Mesa de regalos</div>
@@ -2088,12 +2078,12 @@
         <div class="gift-num">sandyymemo</div>
       </a>
     </div>
-    <div class="gifts-bank reveal d5">
+    <div class="gifts-bank reveal d5" id="bankInfo">
       <h4>Lluvia de sobres</h4>
-      <p class="row">Banco · <strong>BBVA México</strong></p>
-      <p class="row">Titular · <strong>Sandra López</strong></p>
-      <p class="row">CLABE · <strong>012 345 67890123 4567</strong></p>
-      <p class="row">Cuenta · <strong>1234 5678</strong></p>
+      <p class="row">Banco · <strong id="bankName">BBVA México</strong></p>
+      <p class="row">Titular · <strong id="bankHolder">Sandra López</strong></p>
+      <p class="row">CLABE · <strong id="bankClabe">012 345 67890123 4567</strong></p>
+      <p class="row">Cuenta · <strong id="bankAccount">1234 5678</strong></p>
     </div>
   </div>
 </section>
@@ -2101,19 +2091,163 @@
 <!-- ============ 13. FOTO DESPEDIDA ============ -->
 <section class="farewell">
   <div class="farewell-photo reveal">
-    <img src="assets/fotos/s40.jpg" alt="Sandy y Memo" loading="lazy" />
+    <img id="farewellPhoto" src="assets/fotos/s40.jpg" alt="Sandy y Memo" loading="lazy" />
   </div>
   <p class="farewell-text reveal d1">"Gracias por ser parte de nuestra historia."</p>
   <p class="farewell-signature reveal d2">Sandy &amp; Memo</p>
 </section>
 
 <footer class="footer">
-  <p>17 · Octubre · 2026</p>
+  <p id="footerDate">17 · Octubre · 2026</p>
 </footer>
 
 <canvas id="confettiCanvas"></canvas>
 
 <script>
+
+/* ============ APLICAR CONFIG ============ */
+(function applyConfig(){
+  if (typeof CONFIG === 'undefined') {
+    console.warn('config.js no se cargó. Asegúrate de que el archivo existe.');
+    return;
+  }
+  const C = CONFIG;
+  const set = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.textContent = val; };
+  const setAttr = (id, attr, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.setAttribute(attr, val); };
+  const setHtml = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.innerHTML = val; };
+
+  // ── Title y meta tags ──
+  document.title = `${C.couple.bride} & ${C.couple.groom} · ${C.date.display}`;
+
+  // ── Hero ──
+  set('nameA', C.couple.bride);
+  set('nameB', C.couple.groom);
+  setAttr('heroPhoto', 'src', C.photos.hero);
+  setAttr('heroPhoto', 'alt', `${C.couple.bride} y ${C.couple.groom}`);
+  // Fecha del hero: "17 · Octubre · 2026" -> reemplaza por C.date.long
+  const heroDate = document.getElementById('heroDate');
+  if (heroDate) {
+    // formato: "X · Mes · YEAR" donde YEAR va en strong
+    const parts = C.date.long.split('·').map(s => s.trim());
+    if (parts.length === 3) {
+      heroDate.innerHTML = `${parts[0]} · ${parts[1]} · <strong>${parts[2]}</strong>`;
+    } else {
+      heroDate.textContent = C.date.long;
+    }
+  }
+  setHtml('heroMeta', `Ceremonia ${C.ceremony.time}<span class="dot"></span>Recepción ${C.reception.time}`);
+
+  // ── Sobre (sello) ──
+  const seal = document.getElementById('envSeal');
+  if (seal) seal.textContent = `${C.couple.bride[0]}&${C.couple.groom[0]}`;
+
+  // ── Historia ──
+  set('storyP1', C.story.paragraph1);
+  set('storyQuote', `"${C.story.quote}"`);
+  set('storyP2', C.story.paragraph2);
+
+  // ── Ceremonia ──
+  set('ceremonyIcon', C.ceremony.icon);
+  set('ceremonyTitle', C.ceremony.title);
+  set('ceremonyTime', C.ceremony.time);
+  setHtml('ceremonyVenue', `${C.ceremony.venueName}<br/>${C.ceremony.addressLine1}, ${C.ceremony.addressLine2}`);
+
+  // ── Recepción ──
+  set('receptionIcon', C.reception.icon);
+  set('receptionTitle', C.reception.title);
+  set('receptionTime', C.reception.time);
+  setHtml('receptionVenue', `${C.reception.venueName}<br/>${C.reception.addressLine1}, ${C.reception.addressLine2}`);
+
+  // ── Ubicación ──
+  set('mapSubtitle', `${C.reception.venueName} · ${C.reception.addressLine1}, ${C.reception.addressLine2}. Estacionamiento valet disponible.`);
+  setAttr('mapGoogle', 'href', `https://www.google.com/maps/search/?api=1&query=${C.reception.mapsQuery}`);
+  setAttr('mapApple', 'href', `https://maps.apple.com/?q=${C.reception.mapsQuery}`);
+  setAttr('mapWaze', 'href', `https://www.waze.com/ul?q=${C.reception.mapsQuery}`);
+
+  // ── Foto destacada y despedida ──
+  setAttr('featurePhoto', 'src', C.photos.feature);
+  setAttr('featurePhoto', 'alt', `${C.couple.bride} y ${C.couple.groom}`);
+  setAttr('farewellPhoto', 'src', C.photos.farewell);
+  setAttr('farewellPhoto', 'alt', `${C.couple.bride} y ${C.couple.groom}`);
+
+  // ── Dress code ──
+  set('dressTitle', C.dressCode.title);
+  set('dressNote', C.dressCode.description);
+
+  // ── Galería ──
+  const galleryGrid = document.getElementById('galleryGrid');
+  if (galleryGrid && C.photos.gallery && C.photos.gallery.length) {
+    galleryGrid.innerHTML = C.photos.gallery.map(src =>
+      `<div class="gallery-item"><img src="${src}" alt="" loading="lazy" /></div>`
+    ).join('\n');
+  }
+
+  // ── Hospedaje ──
+  const lodgingGrid = document.getElementById('lodgingGrid');
+  if (lodgingGrid && C.hotels && C.hotels.length) {
+    lodgingGrid.innerHTML = C.hotels.map((h, i) => `
+      <div class="lodging-card reveal${i > 0 ? ' d' + (i+1) : ''}">
+        <p class="tag">${h.tag}</p>
+        <h3>${h.name}</h3>
+        <p class="addr">${h.address}<br/>${h.distance}</p>
+        <p class="price">Desde <strong>${h.priceFrom}</strong> ${h.priceUnit}</p>
+        <span class="code">Código: ${h.code}</span>
+      </div>
+    `).join('\n');
+  }
+
+  // ── Audio ──
+  setAttr('musicMp3', 'src', C.music.src);
+  if (C.music.ogg) setAttr('musicOgg', 'src', C.music.ogg);
+
+  // ── RSVP deadline ──
+  set('rsvpDeadline', C.date.deadline);
+  set('successDate', `${C.date.long.split('·').slice(0,2).map(s=>s.trim()).join(' de ').toLowerCase()}, ${C.ceremony.time}`);
+
+  // ── Pase digital ──
+  set('passDate', C.date.short);
+  set('passHour', C.reception.time24);
+  set('passVenue', C.reception.venueName);
+
+  // ── Mesa de regalos ──
+  const giftsGrid = document.getElementById('giftsGrid');
+  if (giftsGrid && C.gifts) {
+    giftsGrid.innerHTML = `
+      <a class="gift-card" href="${C.gifts.liverpool.url}" target="_blank" rel="noopener">
+        <div class="gift-brand">Liverpool</div>
+        <div class="gift-code">Mesa de regalos</div>
+        <div class="gift-num">No. ${C.gifts.liverpool.number}</div>
+      </a>
+      <a class="gift-card" href="${C.gifts.palacio.url}" target="_blank" rel="noopener">
+        <div class="gift-brand">Palacio de Hierro</div>
+        <div class="gift-code">Mesa de regalos</div>
+        <div class="gift-num">No. ${C.gifts.palacio.number}</div>
+      </a>
+      <a class="gift-card" href="${C.gifts.amazon.url}" target="_blank" rel="noopener">
+        <div class="gift-brand">Amazon</div>
+        <div class="gift-code">Lista de boda</div>
+        <div class="gift-num">${C.gifts.amazon.username}</div>
+      </a>
+    `;
+  }
+
+  // ── Banco ──
+  set('bankName', C.bank.name);
+  set('bankHolder', C.bank.holder);
+  set('bankClabe', C.bank.clabe);
+  set('bankAccount', C.bank.account);
+
+  // ── Footer ──
+  set('footerDate', C.date.long);
+
+  // ── Exponer constantes para que el resto del JS las use ──
+  window.__CONFIG_DATE_ISO = C.date.iso;
+  window.__CONFIG_TOTAL_PASES = C.rsvp.totalPases;
+  window.__CONFIG_BRIDE = C.couple.bride;
+  window.__CONFIG_GROOM = C.couple.groom;
+  window.__CONFIG_MUSIC_VOLUME = C.music.volume;
+})();
+
 /* ============ SOBRE — apertura ============ */
 (function(){
   const overlay = document.getElementById('envelopeOverlay');
@@ -2135,14 +2269,14 @@
     sessionStorage.setItem('s_m_envelope_opened', '1');
     // Avisar a otros módulos (música) que el usuario abrió la invitación
     document.dispatchEvent(new CustomEvent('envelope:opened'));
-    // Después de la secuencia de animación, fade out del overlay
+    // Sello cae + solapa abre + fade discreto a la invitación
     setTimeout(() => {
       overlay.classList.add('opened');
       document.body.style.overflow = '';
-    }, 1900);
+    }, 900);
     setTimeout(() => {
       overlay.classList.add('hidden');
-    }, 2800);
+    }, 1700);
   }
 
   envelope.addEventListener('click', open);
@@ -2160,7 +2294,7 @@
   const toggle = document.getElementById('musicToggle');
   if(!audio || !toggle) return;
 
-  audio.volume = 0.4;
+  audio.volume = (typeof window.__CONFIG_MUSIC_VOLUME === 'number') ? window.__CONFIG_MUSIC_VOLUME : 0.4;
 
   const STORAGE_KEY = 's_m_music_muted';
   const ENV_KEY = 's_m_envelope_opened';
@@ -2259,7 +2393,7 @@ const navObserver = new IntersectionObserver(entries=>{
 },{ rootMargin: '-40% 0px -50% 0px' });
 sections.forEach(s=>navObserver.observe(s));
 
-const eventDate = new Date('2026-10-17T18:00:00-06:00').getTime();
+const eventDate = new Date(window.__CONFIG_DATE_ISO || '2026-10-17T18:00:00-06:00').getTime();
 const cdDays = document.getElementById('cdDays');
 const cdHours = document.getElementById('cdHours');
 const cdMinutes = document.getElementById('cdMinutes');
@@ -2307,7 +2441,7 @@ lbClose.addEventListener('click', closeLightbox);
 lightbox.addEventListener('click', e=>{ if(e.target===lightbox) closeLightbox(); });
 window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classList.contains('show')) closeLightbox(); });
 
-const TOTAL_PASES = 3;
+const TOTAL_PASES = window.__CONFIG_TOTAL_PASES || 3;
 document.getElementById('guestGreeting').textContent = 'Querido invitado,';
 document.getElementById('paseCount').textContent = TOTAL_PASES;
 
