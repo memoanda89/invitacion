@@ -94,9 +94,9 @@ const CONFIG = {
   // ─────────────────────────────────────────────────────
   music: {
     // Archivo principal (recomendado: MP3 128 kbps mono, max 4 MB)
-    src: 'assets/musica.mp3',
+    src: 'assets/fondo.mp3',
     // Fallback opcional para navegadores que no soporten MP3
-    ogg: 'assets/musica.ogg',
+    ogg: '',
     // Volumen inicial (0 a 1)
     volume: 0.4
   },
