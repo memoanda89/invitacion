@@ -1191,6 +1191,76 @@
   }
   @media(min-width:480px){ .success-cta{ flex-direction:row; justify-content:center } }
 
+  /* ── Búsqueda de invitados ── */
+  .rsvp-search-field{ position:relative; margin-bottom:8px }
+  .rsvp-search-input{
+    width:100%; padding:14px 44px 14px 0;
+    background:transparent; border:none;
+    border-bottom:2px solid var(--camel-soft);
+    color:var(--espresso); font-family:var(--serif); font-size:18px;
+    transition:border-color .3s; outline:none; box-sizing:border-box;
+  }
+  .rsvp-search-input:focus{ border-color:var(--camel) }
+  .rsvp-search-input::placeholder{ color:var(--pearl); opacity:.6 }
+  .rsvp-search-icon{
+    position:absolute; right:0; top:50%; transform:translateY(-50%);
+    color:var(--camel); font-size:22px; pointer-events:none; opacity:.6;
+  }
+  .rsvp-results{
+    list-style:none; margin:12px 0 0; padding:0;
+    border:1px solid var(--camel-soft);
+    animation:stepIn .3s var(--ease-out);
+  }
+  .rsvp-result-btn{
+    display:flex; justify-content:space-between; align-items:center;
+    width:100%; padding:14px 16px;
+    background:transparent; border:none;
+    border-bottom:1px solid var(--camel-soft);
+    color:var(--espresso); font-family:var(--serif); font-size:16px;
+    cursor:pointer; text-align:left; transition:background .15s;
+  }
+  .rsvp-result-btn:last-child{ border-bottom:none }
+  .rsvp-result-btn:hover{ background:rgba(180,140,80,.07) }
+  .rsvp-result-arrow{ color:var(--camel); margin-left:10px; opacity:.6; transition:opacity .15s, transform .15s }
+  .rsvp-result-btn:hover .rsvp-result-arrow{ opacity:1; transform:translateX(4px) }
+  .rsvp-no-results{
+    margin-top:14px; font-size:14px; color:var(--espresso-soft);
+    text-align:center; font-family:var(--serif); font-style:italic;
+  }
+
+  /* ── Checkboxes de asistentes ── */
+  .rsvp-attendees{ margin-bottom:24px }
+  .rsvp-attendees-label{
+    font-family:var(--sans); font-size:10px; letter-spacing:.32em;
+    text-transform:uppercase; color:var(--camel-deep); margin-bottom:12px;
+  }
+  .rsvp-attendee-item{
+    display:flex; align-items:center; gap:14px;
+    padding:12px 0; border-bottom:1px solid var(--camel-soft); cursor:pointer;
+  }
+  .rsvp-attendee-item:last-child{ border-bottom:none }
+  .rsvp-attendee-item input[type="checkbox"]{ display:none }
+  .rsvp-checkmark{
+    width:20px; height:20px; flex-shrink:0;
+    border:1.5px solid var(--camel-soft); background:transparent;
+    position:relative; transition:border-color .2s, background .2s;
+  }
+  .rsvp-checkmark::after{
+    content:''; position:absolute;
+    left:5px; top:1px; width:6px; height:11px;
+    border:2px solid var(--linen); border-top:none; border-left:none;
+    transform:rotate(45deg); opacity:0; transition:opacity .15s;
+  }
+  .rsvp-attendee-item input:checked ~ .rsvp-checkmark{ background:var(--camel); border-color:var(--camel) }
+  .rsvp-attendee-item input:checked ~ .rsvp-checkmark::after{ opacity:1 }
+  .rsvp-attendee-name{ font-family:var(--serif); font-size:17px; color:var(--espresso) }
+  .btn-muted{
+    color:var(--espresso-soft); font-size:11px; letter-spacing:.28em;
+    text-transform:uppercase; font-family:var(--sans); padding:14px 0;
+    border-bottom:1px solid var(--camel-soft); transition:color .2s;
+  }
+  .btn-muted:hover{ color:var(--camel-deep) }
+
   /* ============ MESA DE REGALOS ============ */
   .gifts{
     padding: var(--pad-section) 0;
@@ -2072,57 +2142,46 @@
 
     <div class="rsvp-wrapper reveal d4">
       <div class="rsvp-progress">
-        <span class="active" data-step="1"></span>
-        <span data-step="2"></span>
-        <span data-step="3"></span>
+        <span class="active" data-step="search"></span>
+        <span data-step="confirm"></span>
       </div>
 
-      <div class="rsvp-step active" data-step="1">
-        <h3>Bienvenido</h3>
-        <p class="greeting" id="guestGreeting">Querido invitado,</p>
-        <p class="lead">Tu presencia hará que este día sea inolvidable. ¿Podrás acompañarnos?</p>
-        <div class="rsvp-buttons">
-          <button class="btn primary" data-action="accept"><span>Confirmo mi asistencia</span></button>
-          <button class="btn outline-pearl" data-action="decline"><span>No podré asistir</span></button>
+      <!-- Paso 1: Buscar nombre -->
+      <div class="rsvp-step active" data-step="search">
+        <h3>Encuentra tu lugar</h3>
+        <p class="lead">Escribe tu nombre o el de tu acompañante para encontrar tu invitación.</p>
+        <div class="rsvp-search-field">
+          <input class="rsvp-search-input" type="text" id="rsvpSearch"
+            placeholder="Busca tu nombre…" autocomplete="off" spellcheck="false" />
+          <span class="rsvp-search-icon" aria-hidden="true">⌕</span>
         </div>
+        <ul class="rsvp-results" id="rsvpResults" style="display:none" role="listbox"></ul>
+        <p class="rsvp-no-results" id="rsvpNoResults" style="display:none">
+          No encontramos tu nombre. Verifica la ortografía o contáctanos.
+        </p>
       </div>
 
-      <div class="rsvp-step" data-step="2">
-        <h3>Tus acompañantes</h3>
-        <p class="lead">Tienes <strong style="color:var(--camel-deep)" id="paseCount">2</strong> pases asignados. Ingresa los nombres de quienes te acompañan.</p>
-        <div class="form-row">
-          <label for="mainName">Tu nombre</label>
-          <input type="text" id="mainName" placeholder="Nombre completo" autocomplete="name"/>
-        </div>
-        <div class="passes-list" id="passesList"></div>
-        <button class="pass-add" id="passAdd" type="button">+ Agregar acompañante</button>
-        <div class="step-nav">
-          <button class="step-back" data-back>← Volver</button>
-          <button class="btn primary" data-next="3"><span>Continuar</span></button>
-        </div>
-      </div>
-
-      <div class="rsvp-step" data-step="3">
-        <h3>Un detalle más</h3>
-        <p class="lead">Opcional: ayúdanos a que tu noche sea perfecta.</p>
-        <div class="form-row">
-          <label for="song">Tu canción favorita para la pista</label>
-          <input type="text" id="song" placeholder="Artista — Canción" />
+      <!-- Paso 2: Confirmar asistentes + teléfono -->
+      <div class="rsvp-step" data-step="confirm">
+        <h3>Confirma tu asistencia</h3>
+        <div class="rsvp-attendees">
+          <p class="rsvp-attendees-label">¿Quiénes asistirán?</p>
+          <div id="attendeesList"></div>
         </div>
         <div class="form-row">
-          <label for="message">Un mensaje para los novios</label>
-          <textarea id="message" placeholder="Comparte algo que quieras que leamos en el día"></textarea>
-        </div>
-        <div class="form-row">
-          <label for="phone">Teléfono de contacto</label>
-          <input type="tel" id="phone" placeholder="+52 ..." autocomplete="tel" />
+          <label for="rsvpPhone">WhatsApp de contacto <em style="font-style:normal;opacity:.6">(opcional)</em></label>
+          <input type="tel" id="rsvpPhone" placeholder="+52 55 0000 0000" autocomplete="tel" />
         </div>
         <div class="step-nav">
-          <button class="step-back" data-back>← Volver</button>
-          <button class="btn primary" data-action="submit"><span>Sellar mi confirmación</span></button>
+          <button class="step-back" id="rsvpBack">← Volver</button>
+          <div style="display:flex;gap:16px;align-items:center">
+            <button class="btn-muted" id="rsvpDecline">No podré ir</button>
+            <button class="btn primary" id="rsvpConfirm"><span>Confirmar asistencia</span></button>
+          </div>
         </div>
       </div>
 
+      <!-- Confirmado -->
       <div class="rsvp-step" data-step="success">
         <div class="rsvp-success">
           <div class="seal">S&amp;M</div>
@@ -2135,6 +2194,7 @@
         </div>
       </div>
 
+      <!-- Declinado -->
       <div class="rsvp-step" data-step="declined">
         <div class="rsvp-success">
           <div class="seal" style="background:radial-gradient(circle, var(--linen), var(--eggshell));color:var(--pearl);border-color:var(--pearl)">✿</div>
@@ -2590,75 +2650,157 @@ lbClose.addEventListener('click', closeLightbox);
 lightbox.addEventListener('click', e=>{ if(e.target===lightbox) closeLightbox(); });
 window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classList.contains('show')) closeLightbox(); });
 
-const TOTAL_PASES = window.__CONFIG_TOTAL_PASES || 3;
-document.getElementById('guestGreeting').textContent = 'Querido invitado,';
-document.getElementById('paseCount').textContent = TOTAL_PASES;
+/* ============ RSVP — Búsqueda desde lista de invitados ============ */
+(function(){
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzBCvDqLDBXASV8W3Gv34aR7SecHc4YoVMX_5xTSS2UHl5FyP6P_DCfuQbzI3By0xHG/exec';
 
-let currentStep = 1;
-const steps = {
-  1: document.querySelector('[data-step="1"].rsvp-step'),
-  2: document.querySelector('[data-step="2"].rsvp-step'),
-  3: document.querySelector('[data-step="3"].rsvp-step'),
-  success: document.querySelector('[data-step="success"].rsvp-step'),
-  declined: document.querySelector('[data-step="declined"].rsvp-step'),
-};
-const progressDots = document.querySelectorAll('.rsvp-progress span');
-function goTo(step){
-  Object.values(steps).forEach(s=>s.classList.remove('active'));
-  steps[step].classList.add('active');
-  currentStep = step;
-  progressDots.forEach(dot=>{
-    const n = parseInt(dot.dataset.step);
-    dot.classList.remove('active','done');
-    if(typeof step==='number'){
-      if(n < step) dot.classList.add('done');
-      if(n === step) dot.classList.add('active');
-    }
-  });
-}
+  /* ── Estado ─────────────────────────────────────────────────── */
+  let guests = [];
+  let selectedGroup = null;
+  let selectedAttendees = new Set();
 
-const passesList = document.getElementById('passesList');
-const passAdd = document.getElementById('passAdd');
-let paseCount = 0;
-const MAX_PASES_EXTRA = TOTAL_PASES - 1;
-function addPaseRow(){
-  if(paseCount >= MAX_PASES_EXTRA) return;
-  paseCount++;
-  const row = document.createElement('div');
-  row.className = 'pass-item';
-  row.innerHTML = `<input type="text" placeholder="Acompañante ${paseCount}" />
-    <button type="button" class="pass-remove" aria-label="Quitar">✕</button>`;
-  row.querySelector('.pass-remove').addEventListener('click', ()=>{
-    row.style.transition = 'opacity .3s, max-height .3s';
-    row.style.maxHeight = row.offsetHeight + 'px';
-    requestAnimationFrame(()=>{
-      row.style.maxHeight = '0';
-      row.style.opacity = '0';
+  /* ── Pasos ──────────────────────────────────────────────────── */
+  const stepEls = {
+    search:   document.querySelector('[data-step="search"].rsvp-step'),
+    confirm:  document.querySelector('[data-step="confirm"].rsvp-step'),
+    success:  document.querySelector('[data-step="success"].rsvp-step'),
+    declined: document.querySelector('[data-step="declined"].rsvp-step'),
+  };
+  const progressDots = document.querySelectorAll('.rsvp-progress span');
+
+  function goTo(step) {
+    Object.values(stepEls).forEach(el => el.classList.remove('active'));
+    if (stepEls[step]) stepEls[step].classList.add('active');
+    progressDots.forEach(dot => {
+      dot.classList.remove('active','done');
+      if (step === 'confirm' && dot.dataset.step === 'search') dot.classList.add('done');
+      if (dot.dataset.step === step) dot.classList.add('active');
     });
-    setTimeout(()=>{ row.remove(); paseCount--; updateAddButton(); }, 300);
-  });
-  passesList.appendChild(row);
-  updateAddButton();
-}
-function updateAddButton(){
-  passAdd.style.display = paseCount >= MAX_PASES_EXTRA ? 'none' : 'inline-block';
-}
-if(MAX_PASES_EXTRA > 0) addPaseRow();
-passAdd.addEventListener('click', addPaseRow);
+  }
 
-document.querySelectorAll('[data-action="accept"]').forEach(b=>b.addEventListener('click', ()=>{
-  if(MAX_PASES_EXTRA > 0) goTo(2); else goTo(3);
-}));
-document.querySelectorAll('[data-action="decline"]').forEach(b=>b.addEventListener('click', ()=>goTo('declined')));
-document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click', ()=>goTo(parseInt(b.dataset.next))));
-document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click', ()=>{
-  if(currentStep === 3) goTo(MAX_PASES_EXTRA > 0 ? 2 : 1);
-  else if(currentStep === 2) goTo(1);
-}));
-document.querySelectorAll('[data-action="submit"]').forEach(b=>b.addEventListener('click', ()=>{
-  goTo('success');
-  fireConfetti();
-}));
+  /* ── Normalización ──────────────────────────────────────────── */
+  function normalize(s) {
+    return (s || '').toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g,'').trim();
+  }
+
+  /* ── Cargar lista de invitados ──────────────────────────────── */
+  fetch('assets/invitados.json')
+    .then(r => r.json())
+    .then(data => { guests = data; })
+    .catch(() => console.warn('invitados.json no encontrado'));
+
+  /* ── Búsqueda ───────────────────────────────────────────────── */
+  const searchInput = document.getElementById('rsvpSearch');
+  const resultsList = document.getElementById('rsvpResults');
+  const noResultsEl = document.getElementById('rsvpNoResults');
+
+  searchInput.addEventListener('input', function() {
+    const q = normalize(this.value.trim());
+    resultsList.innerHTML = '';
+    resultsList.style.display = 'none';
+    noResultsEl.style.display = 'none';
+    if (q.length < 2) return;
+
+    const found = guests.filter(row =>
+      normalize(row.invitado).includes(q) ||
+      normalize(row.acompanante).includes(q)
+    );
+
+    if (!found.length) { noResultsEl.style.display = 'block'; return; }
+
+    resultsList.style.display = 'block';
+    found.forEach(row => {
+      const members = [row.invitado, row.acompanante].filter(Boolean);
+      const li  = document.createElement('li');
+      li.setAttribute('role','option');
+      const btn = document.createElement('button');
+      btn.className = 'rsvp-result-btn';
+      btn.type = 'button';
+      btn.innerHTML = `<span>${members.join(' &amp; ')}</span><span class="rsvp-result-arrow">→</span>`;
+      btn.addEventListener('click', () => selectGroup({ row, members }));
+      li.appendChild(btn);
+      resultsList.appendChild(li);
+    });
+  });
+
+  /* ── Seleccionar grupo ──────────────────────────────────────── */
+  function selectGroup(group) {
+    selectedGroup = group;
+    selectedAttendees = new Set(group.members);
+    renderAttendees();
+    goTo('confirm');
+  }
+
+  function renderAttendees() {
+    const list = document.getElementById('attendeesList');
+    list.innerHTML = '';
+    (selectedGroup.members || []).forEach(name => {
+      const label = document.createElement('label');
+      label.className = 'rsvp-attendee-item';
+      const chk = document.createElement('input');
+      chk.type = 'checkbox';
+      chk.checked = true;
+      chk.addEventListener('change', function() {
+        if (this.checked) selectedAttendees.add(name);
+        else selectedAttendees.delete(name);
+        document.getElementById('rsvpConfirm').disabled = selectedAttendees.size === 0;
+      });
+      const mark = document.createElement('span');
+      mark.className = 'rsvp-checkmark';
+      const nameEl = document.createElement('span');
+      nameEl.className = 'rsvp-attendee-name';
+      nameEl.textContent = name;
+      label.appendChild(chk);
+      label.appendChild(mark);
+      label.appendChild(nameEl);
+      list.appendChild(label);
+    });
+  }
+
+  /* ── Navegación ─────────────────────────────────────────────── */
+  document.getElementById('rsvpBack').addEventListener('click', () => {
+    goTo('search');
+    searchInput.value = '';
+    resultsList.innerHTML = ''; resultsList.style.display = 'none';
+    noResultsEl.style.display = 'none';
+  });
+
+  /* ── Confirmar ──────────────────────────────────────────────── */
+  document.getElementById('rsvpConfirm').addEventListener('click', () => {
+    if (!selectedGroup || selectedAttendees.size === 0) return;
+    const phone = document.getElementById('rsvpPhone').value.trim();
+    sendConfirmation(selectedGroup.row.id, [...selectedAttendees], phone, () => {
+      goTo('success');
+      if (typeof fireConfetti === 'function') fireConfetti();
+    });
+  });
+
+  /* ── Declinar ───────────────────────────────────────────────── */
+  document.getElementById('rsvpDecline').addEventListener('click', () => {
+    if (selectedGroup) sendConfirmation(selectedGroup.row.id, [], '', () => {});
+    goTo('declined');
+  });
+
+  /* ── Confirmación vía JSONP (sin CORS) ──────────────────────── */
+  function sendConfirmation(id, asistentes, phone, cb) {
+    if (!GAS_URL) { cb(); return; }
+    const cbName = '_rsvpCb' + Date.now();
+    const params = new URLSearchParams({
+      action: 'confirm', id: String(id),
+      phone: phone, asistentes: asistentes.join('|'), callback: cbName,
+    });
+    window[cbName] = function(data) {
+      delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+      cb(data);
+    };
+    const script = document.createElement('script');
+    script.onerror = () => cb(null);
+    script.src = GAS_URL + '?' + params.toString();
+    document.body.appendChild(script);
+  }
+})();
 
 document.getElementById('addCalendar').addEventListener('click', ()=>{
   const ics = [

@@ -2,7 +2,7 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withJsonpSupport } from '@angular/common/http';
 
 import { routes } from './app.routes';
 
@@ -20,6 +20,6 @@ export const appConfig: ApplicationConfig = {
     // antes de que JS termine de hidratar, el evento no se pierde.
     provideClientHydration(withEventReplay()),
     provideAnimations(),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withJsonpSupport()),
   ],
 };

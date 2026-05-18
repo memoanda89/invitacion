@@ -8,91 +8,138 @@
 
     <div class="rsvp-card" revealOnScroll [delay]="300">
 
-      <!-- Paso 1: ¿Asistirás? -->
-      @if (rsvp.currentStep() === 1) {
+      <!-- ── Paso: Buscar nombre ───────────────────────────────────────── -->
+      @if (rsvp.currentStep() === 'search') {
         <div class="wizard-step">
-          <p class="rsvp-guest-name">{{ rsvp.guest()?.name ?? 'Invitado' }}</p>
-          <p class="rsvp-question">Nos encantaría contar contigo en este día especial</p>
-          <div class="rsvp-actions">
-            <button class="btn-gold" (click)="accept()">Sí, asistiré</button>
-            <button class="btn-outline" (click)="decline()">No podré asistir</button>
+          <p class="rsvp-question">
+            Escribe tu nombre para confirmar tu asistencia
+          </p>
+
+          <div class="search-field">
+            <input
+              class="search-input"
+              type="text"
+              placeholder="Busca tu nombre…"
+              [value]="searchQuery"
+              (input)="onSearch($event)"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <span class="search-icon" aria-hidden="true">⌕</span>
+          </div>
+
+          @if (searchResults().length > 0) {
+            <ul class="search-results" role="listbox">
+              @for (group of searchResults(); track group.row.id) {
+                <li role="option">
+                  <button
+                    class="result-item"
+                    type="button"
+                    (click)="selectGroup(group)"
+                  >
+                    <span class="result-names">
+                      {{ group.members.join(' &amp; ') }}
+                    </span>
+                    <span class="result-arrow" aria-hidden="true">→</span>
+                  </button>
+                </li>
+              }
+            </ul>
+          }
+
+          @if (noResults()) {
+            <p class="no-results">
+              No encontramos tu nombre. Verifica la ortografía o contáctanos.
+            </p>
+          }
+
+          @if (guestSearch.loadError()) {
+            <p class="no-results load-error">
+              No se pudo cargar la lista de invitados. Intenta recargar la página.
+            </p>
+          }
+        </div>
+      }
+
+      <!-- ── Paso: Confirmar asistentes + teléfono ─────────────────────── -->
+      @if (rsvp.currentStep() === 'confirm') {
+        <div class="wizard-step">
+          <p class="step-label">Confirma tu asistencia</p>
+
+          <div class="attendees-section">
+            <p class="attendees-label">¿Quién asistirá?</p>
+
+            @for (member of (selectedGroup()?.members ?? []); track member) {
+              <label class="attendee-item">
+                <input
+                  class="attendee-checkbox"
+                  type="checkbox"
+                  [checked]="isSelected(member)"
+                  (change)="toggleAttendee(member)"
+                />
+                <span class="checkmark" aria-hidden="true"></span>
+                <span class="attendee-name">{{ member }}</span>
+              </label>
+            }
+          </div>
+
+          <div class="field">
+            <label for="phone-input">
+              WhatsApp para confirmar
+              <span class="optional">(opcional)</span>
+            </label>
+            <input
+              id="phone-input"
+              type="tel"
+              [value]="phone"
+              (input)="onPhoneInput($event)"
+              placeholder="+52 55 0000 0000"
+            />
+          </div>
+
+          <div class="wizard-nav">
+            <button
+              type="button"
+              class="btn-outline"
+              (click)="backToSearch()"
+            >
+              ← Atrás
+            </button>
+
+            <div class="confirm-actions">
+              <button
+                type="button"
+                class="btn-outline-muted"
+                (click)="decline()"
+              >
+                No podré ir
+              </button>
+              <button
+                type="button"
+                class="btn-gold"
+                [disabled]="selectedAttendees().size === 0 || rsvp.submitting()"
+                (click)="confirm()"
+              >
+                {{ rsvp.submitting() ? 'Guardando…' : 'Confirmar' }}
+              </button>
+            </div>
           </div>
         </div>
       }
 
-      <!-- Paso 2: Acompañantes -->
-      @if (rsvp.currentStep() === 2) {
-        <div class="wizard-step">
-          <p class="step-label">Paso 2 de 3 — Acompañantes</p>
-          <form [formGroup]="form">
-            <div class="field">
-              <label>Tu nombre completo</label>
-              <input formControlName="mainName" type="text" placeholder="Nombre y apellido" />
-            </div>
-
-            <div formArrayName="companions">
-              @for (ctrl of companions.controls; track $index) {
-                <div class="field">
-                  <label>Acompañante {{ $index + 1 }}</label>
-                  <div class="field-row">
-                    <input [formControlName]="$index" type="text" placeholder="Nombre completo" />
-                    <button type="button" class="btn-remove" (click)="removeCompanion($index)">✕</button>
-                  </div>
-                </div>
-              }
-            </div>
-
-            @if (canAddCompanion()) {
-              <button type="button" class="btn-add" (click)="addCompanion()">+ Agregar acompañante</button>
-            }
-
-            <div class="wizard-nav">
-              <button type="button" class="btn-outline" (click)="back()">Atrás</button>
-              <button type="button" class="btn-gold" (click)="next(3)">Siguiente</button>
-            </div>
-          </form>
-        </div>
-      }
-
-      <!-- Paso 3: Mensaje y canción -->
-      @if (rsvp.currentStep() === 3) {
-        <div class="wizard-step">
-          <p class="step-label">Paso 3 de 3 — Detalles finales</p>
-          <form [formGroup]="form" (ngSubmit)="submit()">
-            <div class="field">
-              <label>¿Qué canción no puede faltar?</label>
-              <input formControlName="song" type="text" placeholder="Canción para la pista" />
-            </div>
-            <div class="field">
-              <label>Mensaje para los novios <span class="optional">(opcional)</span></label>
-              <textarea formControlName="message" rows="3" placeholder="Escribe algo especial..."></textarea>
-            </div>
-            <div class="field">
-              <label>WhatsApp <span class="optional">(opcional)</span></label>
-              <input formControlName="phone" type="tel" placeholder="+52 55 0000 0000" />
-            </div>
-
-            <div class="wizard-nav">
-              <button type="button" class="btn-outline" (click)="back()">Atrás</button>
-              <button type="submit" class="btn-gold" [disabled]="rsvp.submitting()">
-                {{ rsvp.submitting() ? 'Enviando…' : 'Confirmar asistencia' }}
-              </button>
-            </div>
-          </form>
-        </div>
-      }
-
-      <!-- Confirmado -->
+      <!-- ── Confirmado ────────────────────────────────────────────────── -->
       @if (rsvp.currentStep() === 'success') {
         <div class="wizard-step rsvp-success">
           <div class="success-icon">✦</div>
           <h3>¡Nos vemos pronto!</h3>
-          <p>Tu asistencia ha sido confirmada. Guarda la fecha en tu calendario.</p>
-          <button class="btn-outline" (click)="addToCalendar()">Agregar al calendario</button>
+          <p>Tu asistencia ha sido confirmada. ¡Te esperamos!</p>
+          <button class="btn-outline" (click)="addToCalendar()">
+            Agregar al calendario
+          </button>
         </div>
       }
 
-      <!-- Declinado -->
+      <!-- ── Declinado ──────────────────────────────────────────────────── -->
       @if (rsvp.currentStep() === 'declined') {
         <div class="wizard-step rsvp-declined">
           <div class="success-icon">♡</div>

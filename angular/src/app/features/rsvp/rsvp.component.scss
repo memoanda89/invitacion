@@ -16,7 +16,7 @@
 }
 
 .wizard-step {
-  animation: fadeInUp .5s var(--ease-out) both;
+  animation: fadeInUp .45s var(--ease-out) both;
 }
 
 @keyframes fadeInUp {
@@ -24,27 +24,98 @@
   to   { opacity: 1; transform: none; }
 }
 
-.rsvp-guest-name {
-  font-family: var(--display);
-  font-size: clamp(28px, 5vw, 42px);
-  color: var(--gold-light);
-  text-align: center;
-  margin-bottom: 12px;
-}
+// ── Búsqueda ────────────────────────────────────────────────────────────────
 
 .rsvp-question {
   text-align: center;
   color: var(--pearl);
   font-size: 15px;
-  margin-bottom: 40px;
+  margin-bottom: 28px;
+  line-height: 1.6;
 }
 
-.rsvp-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
+.search-field {
+  position: relative;
+
+  .search-input {
+    width: 100%;
+    background: var(--obsidian-elev);
+    border: 1px solid rgba(201,169,97,.25);
+    color: var(--ivory);
+    padding: 14px 44px 14px 18px;
+    font-size: 15px;
+    font-family: var(--sans);
+    outline: none;
+    transition: border-color .2s;
+    box-sizing: border-box;
+
+    &:focus { border-color: var(--gold); }
+    &::placeholder { color: var(--pearl); opacity: .45; }
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    font-size: 20px;
+    pointer-events: none;
+    opacity: .7;
+  }
 }
+
+.search-results {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  border: 1px solid rgba(201,169,97,.15);
+  animation: fadeInUp .3s var(--ease-out) both;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 14px 18px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(201,169,97,.08);
+  color: var(--ivory);
+  font-family: var(--sans);
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: background .15s;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: rgba(201,169,97,.07); }
+
+  .result-names { flex: 1; }
+
+  .result-arrow {
+    color: var(--gold);
+    margin-left: 12px;
+    opacity: .7;
+    transition: opacity .15s, transform .15s;
+  }
+
+  &:hover .result-arrow {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+}
+
+.no-results {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--pearl);
+  opacity: .7;
+  text-align: center;
+}
+
+// ── Confirmación ─────────────────────────────────────────────────────────────
 
 .step-label {
   font-size: 11px;
@@ -53,6 +124,74 @@
   color: var(--gold);
   margin-bottom: 28px;
 }
+
+.attendees-section {
+  margin-bottom: 28px;
+}
+
+.attendees-label {
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--pearl);
+  margin-bottom: 14px;
+}
+
+.attendee-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(201,169,97,.08);
+  cursor: pointer;
+
+  &:last-child { border-bottom: none; }
+
+  .attendee-checkbox {
+    display: none; // Ocultamos el nativo, usamos .checkmark
+  }
+
+  .checkmark {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    border: 1px solid rgba(201,169,97,.4);
+    background: transparent;
+    position: relative;
+    transition: border-color .2s, background .2s;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 1px;
+      width: 6px;
+      height: 11px;
+      border: 2px solid var(--noir);
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+      opacity: 0;
+      transition: opacity .15s;
+    }
+  }
+
+  .attendee-checkbox:checked ~ .checkmark {
+    background: var(--gold);
+    border-color: var(--gold);
+
+    &::after { opacity: 1; }
+  }
+
+  .attendee-name {
+    font-size: 15px;
+    color: var(--ivory);
+    font-family: var(--display);
+    letter-spacing: .04em;
+  }
+}
+
+// ── Campos ────────────────────────────────────────────────────────────────────
 
 .field {
   margin-bottom: 20px;
@@ -66,7 +205,7 @@
     margin-bottom: 8px;
   }
 
-  input, textarea {
+  input {
     width: 100%;
     background: var(--obsidian-elev);
     border: 1px solid rgba(201,169,97,.2);
@@ -76,17 +215,11 @@
     font-family: var(--sans);
     outline: none;
     transition: border-color .2s;
+    box-sizing: border-box;
 
     &:focus { border-color: var(--gold); }
     &::placeholder { color: var(--pearl); opacity: .5; }
   }
-
-  textarea { resize: vertical; }
-}
-
-.field-row {
-  display: flex;
-  gap: 8px;
 }
 
 .optional {
@@ -94,14 +227,41 @@
   font-size: 10px;
   text-transform: none;
   letter-spacing: 0;
+  opacity: .7;
 }
+
+// ── Navegación ────────────────────────────────────────────────────────────────
+
+.wizard-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 32px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 10px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
+}
+
+// ── Botones ───────────────────────────────────────────────────────────────────
 
 .btn-gold {
   display: inline-block;
-  padding: 14px 40px;
+  padding: 13px 32px;
   background: var(--gold);
   color: var(--noir);
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: .18em;
   text-transform: uppercase;
   border: none;
@@ -115,10 +275,10 @@
 
 .btn-outline {
   display: inline-block;
-  padding: 14px 40px;
+  padding: 13px 28px;
   border: 1px solid var(--gold);
   color: var(--gold);
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: .18em;
   text-transform: uppercase;
   background: transparent;
@@ -129,41 +289,23 @@
   &:hover { background: var(--gold); color: var(--noir); }
 }
 
-.btn-add {
-  background: none;
-  border: 1px dashed rgba(201,169,97,.4);
-  color: var(--gold);
-  font-size: 12px;
-  letter-spacing: .14em;
-  padding: 10px 20px;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom: 24px;
-  font-family: var(--sans);
-  transition: border-color .2s;
-
-  &:hover { border-color: var(--gold); }
-}
-
-.btn-remove {
-  background: none;
-  border: 1px solid rgba(201,169,97,.2);
+.btn-outline-muted {
+  display: inline-block;
+  padding: 13px 20px;
+  border: 1px solid rgba(201,169,97,.25);
   color: var(--pearl);
-  padding: 0 12px;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  background: transparent;
   cursor: pointer;
-  font-size: 12px;
-  flex-shrink: 0;
-  transition: color .2s, border-color .2s;
+  transition: border-color .2s, color .2s;
+  font-family: var(--sans);
 
-  &:hover { color: var(--gold); border-color: var(--gold); }
+  &:hover { border-color: var(--gold); color: var(--gold); }
 }
 
-.wizard-nav {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 32px;
-}
+// ── Estados terminales ────────────────────────────────────────────────────────
 
 .rsvp-success, .rsvp-declined {
   text-align: center;
