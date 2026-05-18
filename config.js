@@ -22,13 +22,13 @@ const CONFIG = {
   date: {
     // Fecha y hora reales del evento (formato ISO con zona horaria)
     // Zona horaria México centro = -06:00
-    iso: '2026-10-17T18:00:00-06:00',
+    iso: '2026-10-03T18:00:00-06:00',
 
     // Formatos de presentación
-    display: '17 de Octubre, 2026',     // Para meta tags y título
-    long: '17 · Octubre · 2026',        // Hero principal + footer
-    short: '17 · Oct · 2026',           // Pase digital
-    deadline: '1 de septiembre de 2026' // Fecha límite RSVP
+    display: '03 de Octubre, 2026',     // Para meta tags y título
+    long: '03 · Octubre · 2026',        // Hero principal + footer
+    short: '03 · Oct · 2026',           // Pase digital
+    deadline: '01 de septiembre de 2026' // Fecha límite RSVP
   },
 
   // ─────────────────────────────────────────────────────
@@ -94,9 +94,9 @@ const CONFIG = {
   // ─────────────────────────────────────────────────────
   music: {
     // Archivo principal (recomendado: MP3 128 kbps mono, max 4 MB)
-    src: 'assets/musica.mp3',
+    src: 'assets/fondo.mp3',
     // Fallback opcional para navegadores que no soporten MP3
-    ogg: 'assets/musica.ogg',
+    ogg: 'assets/fondo.ogg',
     // Volumen inicial (0 a 1)
     volume: 0.4
   },
