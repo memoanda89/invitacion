@@ -2127,7 +2127,7 @@
         <div class="rsvp-success">
           <div class="seal">S&amp;M</div>
           <h3>Tu lugar está reservado</h3>
-          <p class="lead">Gracias por confirmar. Te esperamos el <strong style="color:var(--camel-deep)" id="successDate">17 de octubre, 6:00 pm</strong>.</p>
+          <p class="lead">Gracias por confirmar. Te esperamos el <strong style="color:var(--camel-deep)" id="successDate">03 de octubre, 6:00 pm</strong>.</p>
           <div class="success-cta">
             <a href="#pase" class="btn primary"><span>Ver mi pase</span></a>
             <button class="btn" id="addCalendar"><span>Agregar al calendario</span></button>
@@ -2170,7 +2170,7 @@
           </div>
           <div class="pass-row">
             <span class="pass-key">Fecha</span>
-            <span class="pass-val" id="passDate">17 · Oct · 2026</span>
+            <span class="pass-val" id="passDate">03 · Oct · 2026</span>
           </div>
           <div class="pass-row">
             <span class="pass-key">Hora</span>
@@ -2247,7 +2247,7 @@
 </section>
 
 <footer class="footer">
-  <p id="footerDate">17 · Octubre · 2026</p>
+  <p id="footerDate">03 · Octubre · 2026</p>
 </footer>
 
 <canvas id="confettiCanvas"></canvas>
@@ -2273,7 +2273,7 @@
   set('nameB', C.couple.groom);
   setAttr('heroPhoto', 'src', C.photos.hero);
   setAttr('heroPhoto', 'alt', `${C.couple.bride} y ${C.couple.groom}`);
-  // Fecha del hero: "17 · Octubre · 2026" -> reemplaza por C.date.long
+  // Fecha del hero: "03 · Octubre · 2026" -> reemplaza por C.date.long
   const heroDate = document.getElementById('heroDate');
   if (heroDate) {
     // formato: "X · Mes · YEAR" donde YEAR va en strong
@@ -2542,7 +2542,7 @@ const navObserver = new IntersectionObserver(entries=>{
 },{ rootMargin: '-40% 0px -50% 0px' });
 sections.forEach(s=>navObserver.observe(s));
 
-const eventDate = new Date(window.__CONFIG_DATE_ISO || '2026-10-17T18:00:00-06:00').getTime();
+const eventDate = new Date(window.__CONFIG_DATE_ISO || '2026-10-03T18:00:00-06:00').getTime();
 const cdDays = document.getElementById('cdDays');
 const cdHours = document.getElementById('cdHours');
 const cdMinutes = document.getElementById('cdMinutes');
@@ -2697,7 +2697,7 @@ document.getElementById('addCalendar').addEventListener('click', ()=>{
     const qrEl = document.getElementById('passQR');
     if(!qrEl || typeof QRCode === 'undefined') return;
     qrEl.innerHTML = '';
-    const payload = 'Boda Sandy & Memo | ' + guestName + ' | Mesa ' + tableNum + ' | 17 Oct 2026 18:00';
+    const payload = 'Boda Sandy & Memo | ' + guestName + ' | Mesa ' + tableNum + ' | 03 Oct 2026 18:00';
     new QRCode(qrEl, {
       text: payload,
       width: 130,
@@ -2749,7 +2749,7 @@ document.getElementById('addCalendar').addEventListener('click', ()=>{
     shareBtn.addEventListener('click', async () => {
       const shareData = {
         title: 'Sandy & Memo · Boda',
-        text: 'Mi pase para la boda de Sandy y Memo · 17 de octubre 2026',
+        text: 'Mi pase para la boda de Sandy y Memo · 03 de octubre 2026',
         url: window.location.href
       };
       try {

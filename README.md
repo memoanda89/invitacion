@@ -1,5 +1,5 @@
 # Invitación Digital — Isabella & Sebastián
-**Boda · Estilo Gala Nocturna · 17 de Octubre, 2026**
+**Boda · Estilo Gala Nocturna · 03 de Octubre, 2026**
 
 Este proyecto contiene **dos entregables paralelos**:
 
@@ -36,7 +36,7 @@ Todo el contenido editable está al alcance de un buscador (Ctrl+F):
 |---|---|
 | `Isabella` | Nombre de la novia |
 | `Sebastián` | Nombre del novio |
-| `17 · Octubre · 2026` | Fecha del evento (mostrada) |
+| `03 · Octubre · 2026` | Fecha del evento (mostrada) |
 | `2026-10-17T18:00:00-06:00` | Fecha real ISO con timezone (para countdown) |
 | `Catedral de San Gabriel` | Lugar de ceremonia |
 | `Hacienda Los Robles` | Lugar de recepción |

@@ -13,7 +13,7 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import('./layout/shell/shell.component').then(m => m.ShellComponent),
-    title: 'Isabella & Sebastián · 17 de Octubre, 2026',
+    title: 'Isabella & Sebastián · 03 de Octubre, 2026',
   },
   {
     path: 'rsvp/:token',
