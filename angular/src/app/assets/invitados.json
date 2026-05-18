@@ -1,7 +1,5 @@
 [
-  { "id": 1, "invitado": "Juan Pérez",      "acompanante": "María Pérez"     },
-  { "id": 2, "invitado": "Carlos López",    "acompanante": "Laura López"     },
-  { "id": 3, "invitado": "Ana García",      "acompanante": "Pedro García"    },
-  { "id": 4, "invitado": "Roberto Sánchez", "acompanante": ""                },
-  { "id": 5, "invitado": "Diana Torres",    "acompanante": "Marcos Torres"   }
+  { "id": 1, "invitado": "memo",      "acompanante": "sandy"     },
+  { "id": 2, "invitado": "juan",    "acompanante": ""     },
+  { "id": 3, "invitado": "jaime",      "acompanante": "vane"    }
 ]

@@ -34,7 +34,7 @@
  * ============================================================
  */
 
-const SHEET_ID   = 'PEGA_AQUI_TU_SHEET_ID';
+const SHEET_ID   = '1UmIV7J4VNhSgHK8s7GizN4CDD_xr9QfhIAcYxWTe63A';
 const SHEET_NAME = 'Invitados'; // Nombre de la pestaña en tu Google Sheet
 
 // ── Utilidad: normaliza texto (sin acentos, minúsculas) ────────────────────
@@ -111,20 +111,24 @@ function handleSearch(e, callback) {
 // ── Confirmación ───────────────────────────────────────────────────────────
 
 function handleConfirm(e, callback) {
-  var id         = parseInt(e.parameter.id, 10);  // número de fila
+  var id         = parseInt(e.parameter.id, 10);  // id del invitado (1, 2, 3...)
   var phone      = e.parameter.phone      || '';
   var asistentes = e.parameter.asistentes || '';   // nombres separados por '|'
 
-  if (!id || id < 2) {
+  if (!id || id < 1) {
     return jsonpResponse(callback, { success: false, error: 'ID inválido' });
   }
+
+  // +1 porque la fila 1 de la hoja es el encabezado;
+  // el primer invitado (id=1) vive en la fila 2, y así sucesivamente.
+  var rowNum = id + 1;
 
   var ss    = SpreadsheetApp.openById(SHEET_ID);
   var sheet = ss.getSheetByName(SHEET_NAME);
 
-  sheet.getRange(id, 3).setValue(phone);                        // Col C: telefono
-  sheet.getRange(id, 4).setValue(asistentes.replace(/\|/g, ', ')); // Col D: asistentes
-  sheet.getRange(id, 5).setValue(new Date().toLocaleString('es-MX')); // Col E: fecha
+  sheet.getRange(rowNum, 3).setValue(phone);                           // Col C: telefono
+  sheet.getRange(rowNum, 4).setValue(asistentes.replace(/\|/g, ', ')); // Col D: asistentes
+  sheet.getRange(rowNum, 5).setValue(new Date().toLocaleString('es-MX')); // Col E: fecha
 
   return jsonpResponse(callback, { success: true });
 }
