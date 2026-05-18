@@ -1,0 +1,106 @@
+<section class="rsvp" id="rsvp">
+  <div class="container">
+    <header class="section-head">
+      <p class="eyebrow" revealOnScroll>Confirmación</p>
+      <h2 class="section-title" revealOnScroll [delay]="100">¿Nos acompañas?</h2>
+      <div class="divider-gold" revealOnScroll [delay]="200"></div>
+    </header>
+
+    <div class="rsvp-card" revealOnScroll [delay]="300">
+
+      <!-- Paso 1: ¿Asistirás? -->
+      @if (rsvp.currentStep() === 1) {
+        <div class="wizard-step">
+          <p class="rsvp-guest-name">{{ rsvp.guest()?.name ?? 'Invitado' }}</p>
+          <p class="rsvp-question">Nos encantaría contar contigo en este día especial</p>
+          <div class="rsvp-actions">
+            <button class="btn-gold" (click)="accept()">Sí, asistiré</button>
+            <button class="btn-outline" (click)="decline()">No podré asistir</button>
+          </div>
+        </div>
+      }
+
+      <!-- Paso 2: Acompañantes -->
+      @if (rsvp.currentStep() === 2) {
+        <div class="wizard-step">
+          <p class="step-label">Paso 2 de 3 — Acompañantes</p>
+          <form [formGroup]="form">
+            <div class="field">
+              <label>Tu nombre completo</label>
+              <input formControlName="mainName" type="text" placeholder="Nombre y apellido" />
+            </div>
+
+            <div formArrayName="companions">
+              @for (ctrl of companions.controls; track $index) {
+                <div class="field">
+                  <label>Acompañante {{ $index + 1 }}</label>
+                  <div class="field-row">
+                    <input [formControlName]="$index" type="text" placeholder="Nombre completo" />
+                    <button type="button" class="btn-remove" (click)="removeCompanion($index)">✕</button>
+                  </div>
+                </div>
+              }
+            </div>
+
+            @if (canAddCompanion()) {
+              <button type="button" class="btn-add" (click)="addCompanion()">+ Agregar acompañante</button>
+            }
+
+            <div class="wizard-nav">
+              <button type="button" class="btn-outline" (click)="back()">Atrás</button>
+              <button type="button" class="btn-gold" (click)="next(3)">Siguiente</button>
+            </div>
+          </form>
+        </div>
+      }
+
+      <!-- Paso 3: Mensaje y canción -->
+      @if (rsvp.currentStep() === 3) {
+        <div class="wizard-step">
+          <p class="step-label">Paso 3 de 3 — Detalles finales</p>
+          <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="field">
+              <label>¿Qué canción no puede faltar?</label>
+              <input formControlName="song" type="text" placeholder="Canción para la pista" />
+            </div>
+            <div class="field">
+              <label>Mensaje para los novios <span class="optional">(opcional)</span></label>
+              <textarea formControlName="message" rows="3" placeholder="Escribe algo especial..."></textarea>
+            </div>
+            <div class="field">
+              <label>WhatsApp <span class="optional">(opcional)</span></label>
+              <input formControlName="phone" type="tel" placeholder="+52 55 0000 0000" />
+            </div>
+
+            <div class="wizard-nav">
+              <button type="button" class="btn-outline" (click)="back()">Atrás</button>
+              <button type="submit" class="btn-gold" [disabled]="rsvp.submitting()">
+                {{ rsvp.submitting() ? 'Enviando…' : 'Confirmar asistencia' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      }
+
+      <!-- Confirmado -->
+      @if (rsvp.currentStep() === 'success') {
+        <div class="wizard-step rsvp-success">
+          <div class="success-icon">✦</div>
+          <h3>¡Nos vemos pronto!</h3>
+          <p>Tu asistencia ha sido confirmada. Guarda la fecha en tu calendario.</p>
+          <button class="btn-outline" (click)="addToCalendar()">Agregar al calendario</button>
+        </div>
+      }
+
+      <!-- Declinado -->
+      @if (rsvp.currentStep() === 'declined') {
+        <div class="wizard-step rsvp-declined">
+          <div class="success-icon">♡</div>
+          <h3>Te extrañaremos</h3>
+          <p>Gracias por avisarnos. Estarás en nuestros corazones ese día.</p>
+        </div>
+      }
+
+    </div>
+  </div>
+</section>
