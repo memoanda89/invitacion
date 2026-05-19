@@ -38,9 +38,9 @@ const CONFIG = {
     title: 'Ceremonia',
     icon: '✦',
     time: '6:00 pm',
-    venueName: 'Catedral de San Gabriel',
-    addressLine1: 'Av. Reforma 120',
-    addressLine2: 'Centro Histórico'
+    venueName: 'El Tordillo Jardin De Eventos',
+    addressLine1: 'Lib. Juventino Rosas S/N, 36441',
+    addressLine2: 'San Francisco del Rincón, Gto.'
   },
 
   // ─────────────────────────────────────────────────────
@@ -51,12 +51,12 @@ const CONFIG = {
     icon: '❦',
     time: '8:30 pm',
     time24: '18:00 hrs',
-    venueName: 'Hacienda Los Robles',
-    addressLine1: 'Camino al Lago 45',
-    addressLine2: 'Valle del Sol',
+      venueName: 'El Tordillo Jardin De Eventos',
+    addressLine1: 'Lib. Juventino Rosas S/N, 36441',
+    addressLine2: 'San Francisco del Rincón, Gto.',
     // Para los links de Google Maps, Apple Maps y Waze
     // Reemplaza espacios por +
-    mapsQuery: 'Valle+del+Sol'
+    mapsQuery: 'El+Tordillo+Jardin+De+Eventos'
   },
 
   // ─────────────────────────────────────────────────────
@@ -105,8 +105,8 @@ const CONFIG = {
   // HISTORIA — Nuestra historia
   // ─────────────────────────────────────────────────────
   story: {
-    paragraph1: 'Hay encuentros que cambian el rumbo en silencio. El nuestro tuvo café, conversaciones largas y la certeza —desde muy temprano— de que la vida iba a ser más amable de la mano.',
-    quote: 'Donde tú estás, también está mi casa.',
+    paragraph1: 'Hay encuentros que cambian el rumbo en silencio. El nuestro tuvo café, conversaciones largas y la certeza de que la vida iba a ser más amable de la mano.',
+    quote: 'Amar no es mirarse uno al otro, sino mirar juntos en la misma dirección.',
     paragraph2: 'Hoy queremos celebrar este momento rodeados de las personas que han caminado con nosotros. Tu presencia hará que este día sea irrepetible.'
   },
 
@@ -115,7 +115,7 @@ const CONFIG = {
   // ─────────────────────────────────────────────────────
   dressCode: {
     title: 'Formal elegante',
-    description: 'Vestido largo o midi en tonos cálidos. Traje formal oscuro para caballeros. Te pedimos reservar el color blanco para la novia.'
+    description: 'Vestido largo .Traje formal oscuro para caballeros. Te pedimos reservar el color blanco para la novia.'
   },
 
   // ─────────────────────────────────────────────────────
@@ -147,7 +147,7 @@ const CONFIG = {
   // ─────────────────────────────────────────────────────
   gifts: {
     liverpool: {
-      number: '51234567',
+      number: '51982798',
       url: 'https://mesaderegalos.liverpool.com.mx/'
     },
     palacio: {
