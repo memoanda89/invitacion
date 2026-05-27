@@ -1,7 +1,5 @@
 [
-  { "id": 1, "invitado": "memo",      "acompanante": "sandy"     },
-  { "id": 2, "invitado": "juan",    "acompanante": ""     },
-  { "id": 3, "invitado": "jaime",      "acompanante": "vane"    },
-   { "id": 3, "invitado": "memo",      "acompanante": "viry"    },
-    { "id": 3, "invitado": "memo",      "acompanante": "yane"    }
+  { "id": 1, "invitado": "memo",  "acompanantes": ["sandy", "viry", "yane"] },
+  { "id": 2, "invitado": "juan",  "acompanantes": [] },
+  { "id": 3, "invitado": "jaime", "acompanantes": ["vane"] }
 ]

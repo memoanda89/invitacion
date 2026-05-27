@@ -2703,14 +2703,14 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
 
     const found = guests.filter(row =>
       normalize(row.invitado).includes(q) ||
-      normalize(row.acompanante).includes(q)
+      (row.acompanantes || []).some(a => normalize(a).includes(q))
     );
 
     if (!found.length) { noResultsEl.style.display = 'block'; return; }
 
     resultsList.style.display = 'block';
     found.forEach(row => {
-      const members = [row.invitado, row.acompanante].filter(Boolean);
+      const members = [row.invitado, ...(row.acompanantes || [])].filter(Boolean);
       const li  = document.createElement('li');
       li.setAttribute('role','option');
       const btn = document.createElement('button');

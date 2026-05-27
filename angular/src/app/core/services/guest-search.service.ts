@@ -5,12 +5,12 @@ import { firstValueFrom } from 'rxjs';
 export interface GuestRow {
   id: number;
   invitado: string;
-  acompanante: string;
+  acompanantes: string[];   // arreglo: soporta 0, 1 o N acompañantes
 }
 
 export interface GuestGroup {
   row: GuestRow;
-  members: string[];
+  members: string[];        // [invitado, ...acompanantes]
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -49,20 +49,22 @@ export class GuestSearchService {
     }
   }
 
-  /** Busca en columna invitado Y acompanante, sin distinguir acentos ni mayúsculas. */
+  /**
+   * Busca en el invitado principal Y en todos los acompañantes,
+   * sin distinguir acentos ni mayúsculas.
+   */
   search(query: string): GuestGroup[] {
     const q = normalize(query);
     if (q.length < 2) return [];
 
     return this.guests
-      .filter(
-        (row) =>
-          normalize(row.invitado).includes(q) ||
-          normalize(row.acompanante).includes(q)
+      .filter(row =>
+        normalize(row.invitado).includes(q) ||
+        (row.acompanantes ?? []).some(a => normalize(a).includes(q))
       )
-      .map((row) => ({
+      .map(row => ({
         row,
-        members: [row.invitado, row.acompanante].filter(Boolean),
+        members: [row.invitado, ...(row.acompanantes ?? [])].filter(Boolean),
       }));
   }
 
