@@ -1052,6 +1052,13 @@
   .btn:hover::before{ transform:scaleX(1) }
   .btn.primary{ background:var(--camel); color:var(--linen) }
   .btn.primary::before{ background:var(--camel-deep) }
+  .btn.primary:disabled{
+    background:var(--camel-soft);
+    color:rgba(255,255,255,.5);
+    cursor:not-allowed;
+    pointer-events:none;
+    opacity:.6;
+  }
   .btn.outline-pearl{ border-color:var(--pearl); color:var(--pearl) }
   .btn.outline-pearl::before{ background:var(--pearl) }
 
@@ -1119,7 +1126,15 @@
     margin-top:28px;
     display:flex;
     justify-content:space-between;
+    align-items:center;
     gap:12px;
+    flex-wrap:wrap;
+  }
+  .step-nav-right{
+    display:flex;
+    gap:16px;
+    align-items:center;
+    flex-wrap:wrap;
   }
   .step-back{
     color:var(--espresso-soft);
@@ -1128,6 +1143,34 @@
     text-transform:uppercase;
     padding:14px 0;
     font-family:var(--sans);
+  }
+  @media(max-width:520px){
+    .step-nav{
+      flex-direction:column;
+      align-items:stretch;
+      gap:10px;
+    }
+    .step-nav-right{
+      flex-direction:column-reverse;
+      width:100%;
+      gap:10px;
+    }
+    .step-nav-right .btn.primary{
+      width:100%;
+      justify-content:center;
+    }
+    .step-nav-right .btn-muted{
+      width:100%;
+      text-align:center;
+      padding:12px 0;
+    }
+    .step-back{
+      width:100%;
+      text-align:center;
+      padding:10px 0;
+      border-top:1px solid var(--camel-soft);
+      margin-top:4px;
+    }
   }
 
   .rsvp-success{ text-align:center; padding:24px 0 }
@@ -2149,12 +2192,12 @@
           <div id="attendeesList"></div>
         </div>
         <div class="form-row">
-          <label for="rsvpPhone">WhatsApp de contacto <em style="font-style:normal;opacity:.6">(opcional)</em></label>
-          <input type="tel" id="rsvpPhone" placeholder="+52 55 0000 0000" autocomplete="tel" />
+          <label for="rsvpPhone">WhatsApp de contacto <em style="font-style:normal;color:var(--camel)">*</em></label>
+          <input type="tel" id="rsvpPhone" placeholder="+52 55 0000 0000" autocomplete="tel" required />
         </div>
         <div class="step-nav">
           <button class="step-back" id="rsvpBack">← Volver</button>
-          <div style="display:flex;gap:16px;align-items:center">
+          <div class="step-nav-right">
             <button class="btn-muted" id="rsvpDecline">No podré ir</button>
             <button class="btn primary" id="rsvpConfirm"><span>Confirmar asistencia</span></button>
           </div>
@@ -2707,9 +2750,19 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
   function selectGroup(group) {
     selectedGroup = group;
     selectedAttendees = new Set(group.members);
+    document.getElementById('rsvpPhone').value = '';
     renderAttendees();
     goTo('confirm');
+    updateConfirmBtn();
   }
+
+  function updateConfirmBtn() {
+    const phone = document.getElementById('rsvpPhone').value.trim();
+    const ok = selectedAttendees.size > 0 && phone.length > 0;
+    document.getElementById('rsvpConfirm').disabled = !ok;
+  }
+
+  document.getElementById('rsvpPhone').addEventListener('input', updateConfirmBtn);
 
   function renderAttendees() {
     const list = document.getElementById('attendeesList');
@@ -2723,7 +2776,7 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
       chk.addEventListener('change', function() {
         if (this.checked) selectedAttendees.add(name);
         else selectedAttendees.delete(name);
-        document.getElementById('rsvpConfirm').disabled = selectedAttendees.size === 0;
+        updateConfirmBtn();
       });
       const mark = document.createElement('span');
       mark.className = 'rsvp-checkmark';
