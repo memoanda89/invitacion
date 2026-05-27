@@ -636,58 +636,31 @@
   .location{ padding: var(--pad-section) 0 }
   .map-frame{
     aspect-ratio: 16/9;
-    background:
-      radial-gradient(circle at 60% 40%, rgba(184,137,95,.18), transparent 60%),
-      var(--eggshell);
+    background: var(--eggshell);
     border:1px solid var(--camel-soft);
     position:relative;
     overflow:hidden;
     margin-top:48px;
+    border-radius: 4px;
   }
-  .map-grid{
-    position:absolute;inset:0;
-    background-image:
-      linear-gradient(rgba(184,137,95,.10) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(184,137,95,.10) 1px, transparent 1px);
-    background-size: 44px 44px;
-  }
-  .map-pin{
+  .map-iframe{
     position:absolute;
-    top:50%;left:50%;
-    transform:translate(-50%, -100%);
-    color:var(--camel);
-    font-family:var(--serif);
-    font-style:italic;
-    font-size:44px;
-  }
-  .map-pin::after{
-    content:"";
-    position:absolute;
-    bottom:-32px;left:50%;
-    transform:translateX(-50%);
-    width:90px;height:90px;
-    border:1px solid var(--camel);
-    border-radius:50%;
-    opacity:.3;
-    animation: pinPulse 2.8s ease-out infinite;
-  }
-  @keyframes pinPulse{
-    0%{transform:translateX(-50%) scale(.4);opacity:.6}
-    100%{transform:translateX(-50%) scale(1.8);opacity:0}
+    inset:0;
+    width:100%;
+    height:100%;
+    border:0;
+    display:block;
   }
   .map-cta{
-    position:absolute;
-    bottom:24px;
-    left:50%;
-    transform:translateX(-50%);
     display:flex;
     gap:10px;
     flex-wrap:wrap;
     justify-content:center;
+    margin-top:20px;
   }
   .map-cta a{
     padding:10px 20px;
-    background:rgba(244,239,231,.9);
+    background:var(--eggshell);
     border:1px solid var(--camel);
     color:var(--camel-deep);
     text-decoration:none;
@@ -2008,13 +1981,20 @@
       <p class="section-subtitle reveal d3" id="mapSubtitle">Hacienda Los Robles · Camino al Lago 45, Valle del Sol. Estacionamiento valet disponible.</p>
     </div>
     <div class="map-frame reveal d4">
-      <div class="map-grid"></div>
-      <div class="map-pin">✦</div>
-      <div class="map-cta">
-        <a id="mapGoogle" href="https://www.google.com/maps/search/?api=1&query=Valle+del+Sol" target="_blank" rel="noopener">Google Maps</a>
-        <a id="mapApple" href="https://maps.apple.com/?q=Valle+del+Sol" target="_blank" rel="noopener">Apple Maps</a>
-        <a id="mapWaze" href="https://www.waze.com/ul?q=Valle+del+Sol" target="_blank" rel="noopener">Waze</a>
-      </div>
+      <iframe
+        id="mapEmbed"
+        class="map-iframe"
+        src=""
+        loading="lazy"
+        allowfullscreen
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Ubicación del evento"
+      ></iframe>
+    </div>
+    <div class="map-cta reveal d5">
+      <a id="mapGoogle" href="https://www.google.com/maps/search/?api=1&query=El+Tordillo+Jardin+De+Eventos" target="_blank" rel="noopener">Google Maps</a>
+      <a id="mapApple" href="https://maps.apple.com/?q=El+Tordillo+Jardin+De+Eventos" target="_blank" rel="noopener">Apple Maps</a>
+      <a id="mapWaze" href="https://www.waze.com/ul?q=El+Tordillo+Jardin+De+Eventos" target="_blank" rel="noopener">Waze</a>
     </div>
   </div>
 </section>
@@ -2188,7 +2168,6 @@
           <h3>Tu lugar está reservado</h3>
           <p class="lead">Gracias por confirmar. Te esperamos el <strong style="color:var(--camel-deep)" id="successDate">03 de octubre, 6:00 pm</strong>.</p>
           <div class="success-cta">
-            <a href="#pase" class="btn primary"><span>Ver mi pase</span></a>
             <button class="btn" id="addCalendar"><span>Agregar al calendario</span></button>
           </div>
         </div>
@@ -2372,6 +2351,7 @@
   setAttr('mapGoogle', 'href', `https://www.google.com/maps/search/?api=1&query=${C.reception.mapsQuery}`);
   setAttr('mapApple', 'href', `https://maps.apple.com/?q=${C.reception.mapsQuery}`);
   setAttr('mapWaze', 'href', `https://www.waze.com/ul?q=${C.reception.mapsQuery}`);
+  setAttr('mapEmbed', 'src', `https://maps.google.com/maps?q=${C.reception.mapsQuery}&output=embed&z=16&hl=es`);
 
   // ── Foto destacada y despedida ──
   setAttr('featurePhoto', 'src', C.photos.feature);
@@ -2716,7 +2696,7 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
       const btn = document.createElement('button');
       btn.className = 'rsvp-result-btn';
       btn.type = 'button';
-      btn.innerHTML = `<span>${members.join(' &amp; ')}</span><span class="rsvp-result-arrow">→</span>`;
+      btn.innerHTML = `<span>${members.join(', ')}</span><span class="rsvp-result-arrow">→</span>`;
       btn.addEventListener('click', () => selectGroup({ row, members }));
       li.appendChild(btn);
       resultsList.appendChild(li);

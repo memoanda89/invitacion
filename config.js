@@ -56,7 +56,7 @@ const CONFIG = {
     addressLine2: 'San Francisco del Rincón, Gto.',
     // Para los links de Google Maps, Apple Maps y Waze
     // Reemplaza espacios por +
-    mapsQuery: 'El+Tordillo+Jardin+De+Eventos'
+    mapsQuery: 'El+Tordillo+Jardin+De+Eventos+Lib+Juventino+Rosas+San+Francisco+del+Rincon+Guanajuato'
   },
 
   // ─────────────────────────────────────────────────────
