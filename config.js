@@ -124,7 +124,7 @@ const CONFIG = {
   // ─────────────────────────────────────────────────────
   dressCode: {
     title: 'Formal elegante',
-    description: 'Vestido largo .Traje formal oscuro para caballeros. Te pedimos reservar el color blanco para la novia.'
+    description: 'Vestido largo o midi · Traje formal oscuro para caballeros · Te pedimos reservar el color blanco para la novia'
   },
 
   // ─────────────────────────────────────────────────────
@@ -172,10 +172,10 @@ const CONFIG = {
   // LLUVIA DE SOBRES (datos bancarios)
   // ─────────────────────────────────────────────────────
   bank: {
-    name: 'BBVA México',
-    holder: 'Sandra López',
-    clabe: '012 345 67890123 4567',
-    account: '1234 5678'
+    name: 'Banco santander',
+    holder: 'luis guillermo anda reyes',
+    clabe: '014225569337779277',
+    account: '56933777927'
   },
 
   // ─────────────────────────────────────────────────────
