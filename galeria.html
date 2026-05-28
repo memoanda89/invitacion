@@ -47,7 +47,7 @@
 
   /* ============ HEADER ============ */
   .gal-header{
-    padding: clamp(56px, 9vw, 100px) 24px clamp(40px, 6vw, 64px);
+    padding: clamp(40px, 6vw, 72px) 24px clamp(28px, 4vw, 48px);
     text-align:center;
     position:relative;
     z-index:2;
@@ -63,6 +63,8 @@
     color:var(--camel-deep);
     margin-bottom:32px;
     transition: color .3s;
+    position:relative;
+    z-index:3;
   }
   .back-link:hover{ color:var(--camel) }
   .back-link::before{ content:"←"; font-size:14px }
@@ -243,7 +245,7 @@
 <body>
 
 <header class="gal-header">
-  <a href="index.html" class="back-link">Volver a la invitación</a>
+  <a href="index.html#galeria" class="back-link">Volver a la invitación</a>
   <p class="gal-eyebrow">Galería completa</p>
   <h1 class="gal-title">Cada instante, una historia</h1>
   <div class="gal-divider"></div>
