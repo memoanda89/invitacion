@@ -65,7 +65,7 @@ const CONFIG = {
   // ─────────────────────────────────────────────────────
   photos: {
     // Foto grande del hero (página principal)
-    hero: 'assets/fotos/s56.jpg',
+    hero: 'assets/fotos/s43.jpg',
 
     // Foto destacada entre Ubicación y Cuenta regresiva
     feature: 'assets/fotos/s26.jpg',
@@ -124,21 +124,30 @@ const CONFIG = {
   hotels: [
     {
       tag: 'Opción 1',
-      name: 'Hotel Hacienda Real',
-      address: 'Camino al Lago 12, Valle del Sol',
-      distance: 'A 5 min de la recepción',
-      priceFrom: '$2,400',
-      priceUnit: 'MXN / noche',
-      code: 'SANDYMEMO2026'
+      name: 'Hotel Marcel',
+      address: '',
+      distance: '',
+      priceFrom: '',
+      priceUnit: '',
+      code: ''
     },
     {
       tag: 'Opción 2',
-      name: 'Boutique San Gabriel',
-      address: 'Av. Reforma 145, Centro Histórico',
-      distance: 'A 10 min de la catedral',
-      priceFrom: '$1,950',
-      priceUnit: 'MXN / noche',
-      code: 'BODA-SM'
+      name: 'Hotel Margarita',
+      address: '',
+      distance: '',
+      priceFrom: '',
+      priceUnit: '',
+      code: ''
+    },
+    {
+      tag: 'Opción 3',
+      name: 'Hotel Posada',
+      address: '',
+      distance: '',
+      priceFrom: '',
+      priceUnit: '',
+      code: ''
     }
   ],
 
