@@ -260,6 +260,8 @@
     object-fit:cover;
     object-position:center 68%;
     z-index:1;
+    opacity:0;
+    transition: opacity .9s ease;
   }
   .hero-overlay{
     position:absolute;
@@ -1062,6 +1064,18 @@
     pointer-events:none;
     opacity:.6;
   }
+  .btn-spinner{
+    display:inline-block;
+    width:13px; height:13px;
+    border:2px solid rgba(255,255,255,.35);
+    border-top-color:#fff;
+    border-radius:50%;
+    animation: btnSpin .7s linear infinite;
+    vertical-align:middle;
+    margin-right:7px;
+    flex-shrink:0;
+  }
+  @keyframes btnSpin{ to{ transform:rotate(360deg) } }
   .btn.outline-pearl{ border-color:var(--pearl); color:var(--pearl) }
   .btn.outline-pearl::before{ background:var(--pearl) }
 
@@ -1462,7 +1476,6 @@
   .footer{
     padding: 56px 24px 48px;
     text-align:center;
-    border-top:1px solid var(--camel-soft);
     background:var(--linen);
   }
   .footer p{
@@ -2448,8 +2461,24 @@
   const heroSrc = (heroPool && heroPool.length)
     ? heroPool[Math.floor(Math.random() * heroPool.length)]
     : C.photos.hero;
-  setAttr('heroPhoto', 'src', heroSrc);
-  setAttr('heroPhoto', 'alt', `${C.couple.bride} y ${C.couple.groom}`);
+  const heroImg = document.getElementById('heroPhoto');
+  if (heroImg) {
+    heroImg.alt = `${C.couple.bride} y ${C.couple.groom}`;
+    const preload = new Image();
+    preload.onload = () => {
+      heroImg.src = heroSrc;
+      // requestAnimationFrame garantiza que el src ya está pintado antes del fade
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        heroImg.style.opacity = '1';
+      }));
+    };
+    preload.onerror = () => {
+      // fallback: muestra la foto fija si la aleatoria falla
+      heroImg.src = C.photos.hero;
+      heroImg.style.opacity = '1';
+    };
+    preload.src = heroSrc;
+  }
   // Fecha del hero: "03 · Octubre · 2026" -> reemplaza por C.date.long
   const heroDate = document.getElementById('heroDate');
   if (heroDate) {
@@ -2914,11 +2943,18 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
   document.getElementById('rsvpConfirm').addEventListener('click', () => {
     if (!selectedGroup || selectedAttendees.size === 0) return;
     const phone = document.getElementById('rsvpPhone').value.trim();
-    // Armar string de tallas: "nombre:talla|nombre:talla"
     const tallasStr = [...selectedAttendees]
       .map(n => `${n}:${attendeeSizes.get(n) || '-'}`)
       .join('|');
+
+    // Mostrar spinner en el botón
+    const confirmBtn = document.getElementById('rsvpConfirm');
+    const originalHTML = confirmBtn.innerHTML;
+    confirmBtn.innerHTML = '<span class="btn-spinner"></span><span>Enviando...</span>';
+    confirmBtn.disabled = true;
+
     sendConfirmation(selectedGroup.row.id, [...selectedAttendees], phone, tallasStr, () => {
+      confirmBtn.innerHTML = originalHTML;
       goTo('success');
       if (typeof fireConfetti === 'function') fireConfetti();
     });
