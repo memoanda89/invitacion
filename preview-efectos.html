@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Preview Efectos · Sandy & Memo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=Inter:wght@300;400&display=swap" rel="stylesheet"/>
+
+<style>
+  :root{
+    --linen:#F4EFE7;
+    --eggshell:#E8DFD2;
+    --camel:#B8895F;
+    --camel-deep:#8A6A4F;
+    --camel-soft:rgba(184,137,95,.2);
+    --espresso:#3E3327;
+    --espresso-soft:#5C5042;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Inter',system-ui,sans-serif;
+    --ease-out:cubic-bezier(.22,.61,.36,1);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--linen);
+    color:var(--espresso);
+    font-family:var(--sans);
+    font-weight:300;
+    overflow-x:hidden;
+    line-height:1.65;
+  }
+
+  /* ─── Grano de papel ─── */
+  body::before{
+    content:"";
+    position:fixed;inset:0;pointer-events:none;z-index:1;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2'/><feColorMatrix values='0 0 0 0 .72  0 0 0 0 .54  0 0 0 0 .37  0 0 0 .25 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity:.12;mix-blend-mode:multiply;
+  }
+
+  /* ══════════════════════════════════════
+     1. BARRA DE PROGRESO DE SCROLL
+  ══════════════════════════════════════ */
+  #scrollProgress{
+    position:fixed;top:0;left:0;z-index:999;
+    height:2px;width:0%;
+    background:linear-gradient(90deg, var(--camel-deep), var(--camel), #D4A96A);
+    transition:width .1s linear;
+    box-shadow:0 0 6px rgba(184,137,95,.5);
+  }
+
+  /* ══════════════════════════════════════
+     2. HERO — Ken Burns + Petals
+  ══════════════════════════════════════ */
+  .hero{
+    position:relative;
+    height:100svh;min-height:600px;
+    overflow:hidden;
+    display:flex;align-items:flex-end;
+  }
+  .hero-photo{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+    object-position:center top;
+    /* ✦ KEN BURNS */
+    animation: kenBurns 22s ease-in-out infinite alternate;
+    will-change:transform;
+  }
+  @keyframes kenBurns{
+    0%  { transform:scale(1)    translate(0,0) }
+    50% { transform:scale(1.06) translate(-1%,1%) }
+    100%{ transform:scale(1.12) translate(1%,-1%) }
+  }
+  .hero-overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(
+      to bottom,
+      rgba(62,51,39,.08) 0%,
+      rgba(62,51,39,.0) 30%,
+      rgba(62,51,39,.55) 75%,
+      rgba(62,51,39,.82) 100%
+    );
+  }
+  .hero-content{
+    position:relative;z-index:2;
+    width:100%;
+    padding:0 28px clamp(56px,9vw,100px);
+    text-align:center;
+  }
+  .hero-eyebrow{
+    font-family:var(--sans);
+    font-size:10px;letter-spacing:.5em;text-transform:uppercase;
+    color:rgba(244,239,231,.7);
+    margin-bottom:18px;
+    animation:fadeUp .9s var(--ease-out) .3s both;
+  }
+  .hero-names{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:clamp(52px,11vw,110px);
+    color:var(--linen);
+    line-height:1;
+    letter-spacing:-.01em;
+    animation:fadeUp .9s var(--ease-out) .5s both;
+  }
+  .hero-names .amp{
+    font-size:.55em;
+    color:var(--camel);
+    display:block;
+    margin:.06em 0;
+  }
+  .hero-date{
+    font-family:var(--sans);
+    font-size:11px;letter-spacing:.42em;text-transform:uppercase;
+    color:rgba(244,239,231,.65);
+    margin-top:20px;
+    animation:fadeUp .9s var(--ease-out) .7s both;
+  }
+
+  /* Saludo personalizado */
+  #heroGreeting{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:clamp(16px,2vw,22px);
+    color:var(--camel);
+    margin-bottom:8px;
+    opacity:0;
+    animation:fadeUp .9s var(--ease-out) .9s forwards;
+    min-height:1.4em;
+  }
+
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(22px)}
+    to{opacity:1;transform:none}
+  }
+
+  /* ── Pétalos ── */
+  .petal-canvas{
+    position:absolute;inset:0;z-index:1;pointer-events:none;
+  }
+
+  /* ══════════════════════════════════════
+     3. DIVISOR SVG BOTÁNICO
+  ══════════════════════════════════════ */
+  .divider-botanical{
+    display:flex;align-items:center;justify-content:center;
+    gap:16px;
+    padding:48px 0 32px;
+    opacity:0;
+    transition:opacity .8s var(--ease-out), transform .8s var(--ease-out);
+    transform:translateY(16px);
+  }
+  .divider-botanical.visible{opacity:1;transform:none}
+  .divider-botanical .line{
+    flex:1;max-width:120px;height:1px;
+    background:linear-gradient(90deg, transparent, var(--camel), transparent);
+  }
+  .divider-botanical svg{
+    width:clamp(80px,14vw,140px);
+    height:auto;
+    color:var(--camel);
+    opacity:.8;
+  }
+
+  /* ══════════════════════════════════════
+     4. SECCIÓN HISTORIA (demo)
+  ══════════════════════════════════════ */
+  .story{
+    padding:clamp(64px,10vw,120px) 24px;
+    max-width:700px;margin:0 auto;
+    text-align:center;
+    position:relative;z-index:2;
+  }
+  .story-eyebrow{
+    font-family:var(--sans);font-size:10px;
+    letter-spacing:.48em;text-transform:uppercase;
+    color:var(--camel-deep);margin-bottom:20px;
+    opacity:0;transition:opacity .8s .1s, transform .8s .1s var(--ease-out);
+    transform:translateY(14px);
+  }
+  .story-eyebrow.visible{opacity:1;transform:none}
+  .story h2{
+    font-family:var(--serif);font-style:italic;
+    font-size:clamp(36px,5vw,58px);
+    color:var(--espresso);line-height:1.1;
+    margin-bottom:28px;
+    opacity:0;transition:opacity .9s .2s, transform .9s .2s var(--ease-out);
+    transform:translateY(18px);
+  }
+  .story h2.visible{opacity:1;transform:none}
+  .story p{
+    font-size:clamp(15px,1.4vw,17px);
+    color:var(--espresso-soft);
+    line-height:1.8;margin-bottom:24px;
+    opacity:0;transition:opacity .9s .3s, transform .9s .3s var(--ease-out);
+    transform:translateY(14px);
+  }
+  .story p.visible{opacity:1;transform:none}
+  .story .quote{
+    font-family:var(--serif);font-style:italic;
+    font-size:clamp(18px,2.2vw,24px);
+    color:var(--camel-deep);
+    padding:24px 0;
+    border-top:1px solid var(--camel-soft);
+    border-bottom:1px solid var(--camel-soft);
+    margin:28px 0;
+  }
+
+  /* ══════════════════════════════════════
+     5. MONOGRAMA CON SHIMMER
+  ══════════════════════════════════════ */
+  .monogram-section{
+    padding:clamp(56px,9vw,100px) 24px;
+    text-align:center;
+    background:var(--eggshell);
+    position:relative;z-index:2;
+    overflow:hidden;
+  }
+  .monogram-wrap{
+    display:inline-block;position:relative;
+  }
+  .monogram{
+    font-family:var(--serif);
+    font-style:italic;
+    font-weight:400;
+    font-size:clamp(80px,18vw,180px);
+    color:var(--camel-deep);
+    line-height:1;
+    letter-spacing:-.02em;
+    position:relative;
+    /* ✦ SHIMMER */
+    background: linear-gradient(
+      110deg,
+      var(--camel-deep) 0%,
+      var(--camel-deep) 30%,
+      #D4A96A 45%,
+      #F0D8A8 50%,
+      #D4A96A 55%,
+      var(--camel-deep) 70%,
+      var(--camel-deep) 100%
+    );
+    background-size:250% 100%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    animation: shimmer 4s ease-in-out infinite;
+  }
+  @keyframes shimmer{
+    0%  {background-position:200% center}
+    100%{background-position:-200% center}
+  }
+  .monogram-sub{
+    font-family:var(--sans);
+    font-size:10px;letter-spacing:.5em;text-transform:uppercase;
+    color:var(--camel-deep);opacity:.7;
+    margin-top:16px;
+  }
+  /* Ornamento detrás del monograma */
+  .monogram-ring{
+    position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    width:clamp(140px,28vw,280px);
+    height:clamp(140px,28vw,280px);
+    border:1px solid var(--camel);
+    border-radius:50%;
+    opacity:.3;
+    animation:spin 30s linear infinite;
+  }
+  .monogram-ring::before{
+    content:"";
+    position:absolute;inset:8px;
+    border:1px dashed var(--camel);
+    border-radius:50%;
+    opacity:.5;
+  }
+  @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+  /* ══════════════════════════════════════
+     6. CUENTA REGRESIVA ELEGANTE
+  ══════════════════════════════════════ */
+  .countdown-section{
+    padding:clamp(64px,10vw,120px) 24px;
+    text-align:center;
+    position:relative;z-index:2;
+  }
+  .countdown-label{
+    font-family:var(--sans);font-size:10px;
+    letter-spacing:.48em;text-transform:uppercase;
+    color:var(--camel-deep);margin-bottom:40px;
+    opacity:0;transition:opacity .8s, transform .8s var(--ease-out);
+    transform:translateY(12px);
+  }
+  .countdown-label.visible{opacity:1;transform:none}
+  .countdown-grid{
+    display:flex;align-items:flex-start;justify-content:center;
+    gap:clamp(24px,5vw,64px);
+  }
+  .cd-item{
+    display:flex;flex-direction:column;align-items:center;
+    opacity:0;transition:opacity .8s var(--ease-out), transform .8s var(--ease-out);
+    transform:translateY(24px);
+  }
+  .cd-item.visible{opacity:1;transform:none}
+  .cd-item:nth-child(2){transition-delay:.1s}
+  .cd-item:nth-child(3){transition-delay:.2s}
+  .cd-item:nth-child(4){transition-delay:.3s}
+  .cd-num{
+    font-family:var(--serif);
+    font-size:clamp(52px,11vw,100px);
+    font-weight:300;
+    color:var(--espresso);
+    line-height:1;
+    position:relative;
+  }
+  /* Efecto flip/roll */
+  .cd-num span{
+    display:inline-block;
+    animation:rollIn .5s var(--ease-out);
+  }
+  @keyframes rollIn{
+    from{transform:translateY(-100%);opacity:0}
+    to{transform:none;opacity:1}
+  }
+  .cd-unit{
+    font-family:var(--sans);
+    font-size:9px;letter-spacing:.5em;text-transform:uppercase;
+    color:var(--camel-deep);opacity:.7;
+    margin-top:8px;
+  }
+  .cd-sep{
+    font-family:var(--serif);font-style:italic;
+    font-size:clamp(40px,8vw,72px);
+    color:var(--camel);
+    line-height:1;
+    padding-top:.15em;
+    opacity:.5;
+  }
+  .countdown-msg{
+    margin-top:36px;
+    font-family:var(--serif);font-style:italic;
+    font-size:clamp(17px,2vw,22px);
+    color:var(--camel-deep);
+    opacity:0;transition:opacity 1s .5s;
+  }
+  .countdown-msg.visible{opacity:1}
+
+  /* ══════════════════════════════════════
+     7. ETIQUETA "EFECTOS EN DEMO"
+  ══════════════════════════════════════ */
+  .demo-badge{
+    position:fixed;bottom:20px;right:20px;z-index:999;
+    background:var(--espresso);color:var(--linen);
+    font-family:var(--sans);font-size:10px;letter-spacing:.2em;
+    text-transform:uppercase;padding:8px 14px;
+    border-radius:2px;
+    opacity:.85;
+  }
+
+  /* ── scroll indicator ── */
+  .scroll-hint{
+    position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+    z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;
+    animation:fadeUp .9s var(--ease-out) 1.4s both;
+  }
+  .scroll-hint span{
+    font-family:var(--sans);font-size:9px;letter-spacing:.4em;
+    text-transform:uppercase;color:rgba(244,239,231,.5);
+  }
+  .scroll-arrow{
+    width:1px;height:40px;
+    background:linear-gradient(to bottom, rgba(244,239,231,.4), transparent);
+    animation:scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse{
+    0%,100%{opacity:.4;transform:scaleY(1)}
+    50%{opacity:1;transform:scaleY(1.3)}
+  }
+</style>
+</head>
+<body>
+
+<!-- ① Barra de progreso -->
+<div id="scrollProgress"></div>
+
+<!-- ② Hero con Ken Burns + Pétalos -->
+<section class="hero">
+  <img class="hero-photo"
+       src="assets/fotos/s34.jpg"
+       alt="Sandy y Memo"
+       onerror="this.src='assets/fotos/s25.jpg'"/>
+  <div class="hero-overlay"></div>
+  <canvas class="petal-canvas" id="petalCanvas"></canvas>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Te invitamos a nuestra boda</p>
+    <p id="heroGreeting"></p>
+    <h1 class="hero-names">
+      Sandy<span class="amp">&</span>Memo
+    </h1>
+    <p class="hero-date">03 · Octubre · 2026</p>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-arrow"></div>
+    <span>scroll</span>
+  </div>
+</section>
+
+<!-- ③ Divisor botánico -->
+<div class="divider-botanical" data-reveal>
+  <div class="line"></div>
+  <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1">
+    <!-- Rama central -->
+    <path d="M100 30 L60 30 M100 30 L140 30" stroke-linecap="round"/>
+    <!-- Hojas izquierda -->
+    <path d="M80 30 Q72 18 60 22 Q70 28 80 30" fill="currentColor" opacity=".6"/>
+    <path d="M70 30 Q65 20 54 25 Q63 29 70 30" fill="currentColor" opacity=".4"/>
+    <!-- Hojas derecha -->
+    <path d="M120 30 Q128 18 140 22 Q130 28 120 30" fill="currentColor" opacity=".6"/>
+    <path d="M130 30 Q135 20 146 25 Q137 29 130 30" fill="currentColor" opacity=".4"/>
+    <!-- Centro floral -->
+    <circle cx="100" cy="30" r="4" fill="currentColor" opacity=".8"/>
+    <circle cx="100" cy="30" r="7" stroke="currentColor" opacity=".4"/>
+    <!-- Tallos verticales -->
+    <path d="M88 30 Q86 22 90 15" stroke-linecap="round"/>
+    <circle cx="90" cy="14" r="2" fill="currentColor" opacity=".6"/>
+    <path d="M112 30 Q114 22 110 15" stroke-linecap="round"/>
+    <circle cx="110" cy="14" r="2" fill="currentColor" opacity=".6"/>
+    <!-- Puntos decorativos -->
+    <circle cx="60" cy="30" r="1.5" fill="currentColor"/>
+    <circle cx="140" cy="30" r="1.5" fill="currentColor"/>
+  </svg>
+  <div class="line"></div>
+</div>
+
+<!-- ④ Historia con reveals -->
+<section class="story">
+  <p class="story-eyebrow" data-reveal>Nuestra historia</p>
+  <h2 data-reveal>Cada encuentro<br/>fue una elección</h2>
+  <p data-reveal>Hay encuentros que cambian el rumbo en silencio. El nuestro tuvo café, conversaciones largas y la certeza —desde muy temprano— de que la vida iba a ser más amable de la mano.</p>
+  <blockquote class="quote" data-reveal>"Donde tú estás, también está mi casa."</blockquote>
+  <p data-reveal>Hoy queremos celebrar este momento rodeados de las personas que han caminado con nosotros. Tu presencia hará que este día sea irrepetible.</p>
+</section>
+
+<!-- ⑤ Monograma Shimmer -->
+<div class="monogram-section">
+  <div class="monogram-wrap">
+    <div class="monogram-ring"></div>
+    <div class="monogram">S&M</div>
+  </div>
+  <p class="monogram-sub">03 · Octubre · 2026</p>
+</div>
+
+<!-- ③ Otro divisor botánico -->
+<div class="divider-botanical" data-reveal>
+  <div class="line"></div>
+  <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1">
+    <path d="M100 30 L60 30 M100 30 L140 30" stroke-linecap="round"/>
+    <path d="M80 30 Q72 18 60 22 Q70 28 80 30" fill="currentColor" opacity=".6"/>
+    <path d="M70 30 Q65 20 54 25 Q63 29 70 30" fill="currentColor" opacity=".4"/>
+    <path d="M120 30 Q128 18 140 22 Q130 28 120 30" fill="currentColor" opacity=".6"/>
+    <path d="M130 30 Q135 20 146 25 Q137 29 130 30" fill="currentColor" opacity=".4"/>
+    <circle cx="100" cy="30" r="4" fill="currentColor" opacity=".8"/>
+    <circle cx="100" cy="30" r="7" stroke="currentColor" opacity=".4"/>
+    <path d="M88 30 Q86 22 90 15" stroke-linecap="round"/>
+    <circle cx="90" cy="14" r="2" fill="currentColor" opacity=".6"/>
+    <path d="M112 30 Q114 22 110 15" stroke-linecap="round"/>
+    <circle cx="110" cy="14" r="2" fill="currentColor" opacity=".6"/>
+    <circle cx="60" cy="30" r="1.5" fill="currentColor"/>
+    <circle cx="140" cy="30" r="1.5" fill="currentColor"/>
+  </svg>
+  <div class="line"></div>
+</div>
+
+<!-- ⑥ Cuenta regresiva elegante -->
+<section class="countdown-section">
+  <p class="countdown-label" data-reveal>Faltan</p>
+  <div class="countdown-grid">
+    <div class="cd-item" data-reveal>
+      <div class="cd-num"><span id="cdDays">—</span></div>
+      <div class="cd-unit">Días</div>
+    </div>
+    <div class="cd-sep">·</div>
+    <div class="cd-item" data-reveal>
+      <div class="cd-num"><span id="cdHours">—</span></div>
+      <div class="cd-unit">Horas</div>
+    </div>
+    <div class="cd-sep">·</div>
+    <div class="cd-item" data-reveal>
+      <div class="cd-num"><span id="cdMins">—</span></div>
+      <div class="cd-unit">Minutos</div>
+    </div>
+    <div class="cd-sep">·</div>
+    <div class="cd-item" data-reveal>
+      <div class="cd-num"><span id="cdSecs">—</span></div>
+      <div class="cd-unit">Segundos</div>
+    </div>
+  </div>
+  <p class="countdown-msg" data-reveal id="cdMsg"></p>
+</section>
+
+<div style="height:80px"></div>
+
+<div class="demo-badge">✦ Preview de efectos</div>
+
+<script>
+/* ── Saludo por URL (?para=Nombre) ── */
+const params = new URLSearchParams(location.search);
+const paraQuien = params.get('para');
+const greetingEl = document.getElementById('heroGreeting');
+if (paraQuien) {
+  greetingEl.textContent = `${paraQuien}, te esperamos`;
+  greetingEl.style.opacity = '1';
+} else {
+  greetingEl.style.display = 'none';
+}
+
+/* ── Barra de progreso de scroll ── */
+const progressBar = document.getElementById('scrollProgress');
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (scrolled / total * 100) + '%';
+}, { passive: true });
+
+/* ── Reveal al scroll ── */
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('[data-reveal]').forEach(el => revealObs.observe(el));
+
+/* ── Pétalos flotantes (canvas) ── */
+(function() {
+  const canvas = document.getElementById('petalCanvas');
+  const ctx    = canvas.getContext('2d');
+  let W, H, petals = [];
+
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Pétalo SVG path precalculado
+  function makePetal() {
+    const x = Math.random() * W;
+    const y = Math.random() * H - H;
+    return {
+      x, y,
+      size: 4 + Math.random() * 7,
+      speedY: 0.4 + Math.random() * 0.8,
+      speedX: (Math.random() - .5) * 0.4,
+      rot: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - .5) * 0.02,
+      alpha: 0.15 + Math.random() * 0.35,
+      sway: Math.random() * Math.PI * 2,
+      swaySpeed: 0.008 + Math.random() * 0.012,
+    };
+  }
+
+  for (let i = 0; i < 28; i++) {
+    const p = makePetal();
+    p.y = Math.random() * H; // spread initial
+    petals.push(p);
+  }
+
+  function drawPetal(p) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot);
+    ctx.globalAlpha = p.alpha;
+    ctx.fillStyle = '#C4956A';
+    ctx.beginPath();
+    const s = p.size;
+    ctx.ellipse(0, 0, s * 0.45, s, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  let raf;
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    petals.forEach(p => {
+      p.sway += p.swaySpeed;
+      p.x += Math.sin(p.sway) * 0.6 + p.speedX;
+      p.y += p.speedY;
+      p.rot += p.rotSpeed;
+      if (p.y > H + 20) {
+        Object.assign(p, makePetal());
+        p.y = -20;
+      }
+      drawPetal(p);
+    });
+    raf = requestAnimationFrame(animate);
+  }
+  animate();
+
+  // Pausar si tab oculto (perf)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) cancelAnimationFrame(raf);
+    else animate();
+  });
+})();
+
+/* ── Cuenta regresiva ── */
+(function() {
+  const target = new Date('2026-10-03T18:00:00-06:00');
+
+  function getDynamicMsg(days) {
+    if (days > 365) return `¡Nos quedan más de un año para bailar de emoción!`;
+    if (days > 180) return `La espera vale cada segundo.`;
+    if (days > 90)  return `¡Ya se ve el horizonte del gran día!`;
+    if (days > 30)  return `¡Ya casi, ya casi…!`;
+    if (days > 7)   return `¡La boda está a la vuelta de la esquina!`;
+    if (days > 0)   return `¡Esta semana nos casamos! 🎉`;
+    return `¡Hoy es el gran día! ✦`;
+  }
+
+  function update() {
+    const now  = new Date();
+    const diff = target - now;
+    if (diff <= 0) {
+      ['cdDays','cdHours','cdMins','cdSecs'].forEach(id => document.getElementById(id).textContent = '00');
+      document.getElementById('cdMsg').textContent = '¡Hoy es el gran día! ✦';
+      return;
+    }
+    const days  = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins  = Math.floor((diff % 3600000) / 60000);
+    const secs  = Math.floor((diff % 60000) / 1000);
+    const pad   = n => String(n).padStart(2,'0');
+    document.getElementById('cdDays').textContent  = days;
+    document.getElementById('cdHours').textContent = pad(hours);
+    document.getElementById('cdMins').textContent  = pad(mins);
+    document.getElementById('cdSecs').textContent  = pad(secs);
+    document.getElementById('cdMsg').textContent   = getDynamicMsg(days);
+  }
+  update();
+  setInterval(update, 1000);
+})();
+</script>
+</body>
+</html>

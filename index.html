@@ -691,49 +691,56 @@
   .countdown{
     padding: var(--pad-section) 0;
     background:var(--eggshell);
-  }
-  .countdown-grid{
-    display:grid;
-    grid-template-columns:repeat(4, 1fr);
-    gap:10px;
-    max-width:780px;
-    margin:0 auto;
-  }
-  @media(min-width:640px){ .countdown-grid{ gap:24px } }
-  .cd-cell{
     text-align:center;
-    padding:30px 10px;
-    background:var(--linen);
-    border:1px solid var(--camel-soft);
-    position:relative;
   }
-  .cd-cell::before{
-    content:"";
-    position:absolute;
-    top:0;left:0;right:0;
-    height:1px;
-    background:linear-gradient(90deg, transparent, var(--camel), transparent);
-    opacity:.7;
+  .cd-row{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    gap:clamp(16px,4vw,56px);
+    margin-top:clamp(24px,4vw,48px);
+  }
+  .cd-cell{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
   }
   .cd-number{
     font-family:var(--serif);
-    font-style:italic;
-    font-weight:400;
-    font-size:clamp(36px, 6.5vw, 72px);
+    font-weight:300;
+    font-size:clamp(48px, 9vw, 100px);
     color:var(--espresso);
     line-height:1;
     font-variant-numeric: tabular-nums;
     display:inline-block;
     transition: transform .35s var(--ease-out);
   }
-  .cd-number.flip{ transform: rotateX(360deg) }
+  .cd-number.flip{ transform: translateY(-8%) scale(.96); }
   .cd-label{
     font-family:var(--sans);
-    font-size:10px;
-    letter-spacing:.34em;
+    font-size:9px;
+    letter-spacing:.48em;
     text-transform:uppercase;
     color:var(--camel-deep);
-    margin-top:12px;
+    margin-top:10px;
+    opacity:.75;
+  }
+  .cd-sep{
+    font-family:var(--serif);
+    font-size:clamp(36px,6vw,72px);
+    color:var(--camel);
+    line-height:1;
+    padding-top:.2em;
+    opacity:.5;
+    user-select:none;
+  }
+  .cd-message{
+    margin-top:clamp(24px,3vw,40px);
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:clamp(16px,1.8vw,21px);
+    color:var(--camel-deep);
+    opacity:.85;
   }
 
   /* ============ DRESS CODE (compacto) ============ */
@@ -2190,27 +2197,29 @@
   <div class="container">
     <div class="section-head compact">
       <p class="eyebrow reveal">Faltan</p>
-      <h2 class="section-title reveal d1">Para celebrar contigo</h2>
-      <div class="divider-camel tiny reveal d2"></div>
     </div>
-    <div class="countdown-grid reveal d3">
+    <div class="cd-row reveal d1">
       <div class="cd-cell">
-        <div class="cd-number" id="cdDays">000</div>
+        <div class="cd-number" id="cdDays">—</div>
         <div class="cd-label">Días</div>
       </div>
+      <div class="cd-sep">·</div>
       <div class="cd-cell">
-        <div class="cd-number" id="cdHours">00</div>
+        <div class="cd-number" id="cdHours">—</div>
         <div class="cd-label">Horas</div>
       </div>
+      <div class="cd-sep">·</div>
       <div class="cd-cell">
-        <div class="cd-number" id="cdMinutes">00</div>
+        <div class="cd-number" id="cdMinutes">—</div>
         <div class="cd-label">Minutos</div>
       </div>
+      <div class="cd-sep">·</div>
       <div class="cd-cell">
-        <div class="cd-number" id="cdSeconds">00</div>
+        <div class="cd-number" id="cdSeconds">—</div>
         <div class="cd-label">Segundos</div>
       </div>
     </div>
+    <p class="cd-message reveal d2" id="cdMessage"></p>
   </div>
 </section>
 
@@ -2801,28 +2810,40 @@ const navObserver = new IntersectionObserver(entries=>{
 sections.forEach(s=>navObserver.observe(s));
 
 const eventDate = new Date(window.__CONFIG_DATE_ISO || '2026-10-03T18:00:00-06:00').getTime();
-const cdDays = document.getElementById('cdDays');
-const cdHours = document.getElementById('cdHours');
+const cdDays    = document.getElementById('cdDays');
+const cdHours   = document.getElementById('cdHours');
 const cdMinutes = document.getElementById('cdMinutes');
 const cdSeconds = document.getElementById('cdSeconds');
+const cdMessage = document.getElementById('cdMessage');
+const pad = n => String(n).padStart(2,'0');
+function cdMsg(days){
+  if(days > 365) return 'La espera vale cada segundo.';
+  if(days > 180) return '¡Ya se ve el horizonte del gran día!';
+  if(days > 90)  return 'Cada día que pasa, más cerca estamos.';
+  if(days > 30)  return '¡Ya casi, ya casi…!';
+  if(days > 7)   return '¡La boda está a la vuelta de la esquina!';
+  if(days > 0)   return '¡Esta semana nos casamos! 🎉';
+  return '¡Hoy es el gran día! ✦';
+}
 let lastSec = -1;
 function tick(){
   const now = Date.now();
   let diff = Math.max(0, eventDate - now);
   const d = Math.floor(diff / 86400000); diff -= d*86400000;
-  const h = Math.floor(diff / 3600000); diff -= h*3600000;
-  const m = Math.floor(diff / 60000); diff -= m*60000;
+  const h = Math.floor(diff / 3600000);  diff -= h*3600000;
+  const m = Math.floor(diff / 60000);    diff -= m*60000;
   const s = Math.floor(diff / 1000);
-  cdDays.textContent = String(d).padStart(3,'0');
-  cdHours.textContent = String(h).padStart(2,'0');
-  cdMinutes.textContent = String(m).padStart(2,'0');
+  cdDays.textContent    = d;
+  cdHours.textContent   = pad(h);
+  cdMinutes.textContent = pad(m);
   if(s !== lastSec){
-    cdSeconds.textContent = String(s).padStart(2,'0');
+    cdSeconds.textContent = pad(s);
     cdSeconds.classList.remove('flip');
     void cdSeconds.offsetWidth;
     cdSeconds.classList.add('flip');
     lastSec = s;
   }
+  if(cdMessage) cdMessage.textContent = cdMsg(d);
 }
 tick();
 setInterval(tick, 1000);
