@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Sandy &amp; Memo" />
 <meta property="og:title" content="Sandy &amp; Memo · 03 de Octubre, 2026" />
 <meta property="og:description" content="Tenemos el honor de invitarte a celebrar con nosotros nuestra boda. 03 de octubre, 2026." />
-<meta property="og:image" content="https://sandyymemo.com/assets/og-preview.jpg" />
+<meta property="og:image" content="https://memoanda89.github.io/invitacion/assets/og-preview.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="Sandy y Memo · invitación de boda" />
@@ -23,7 +23,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Sandy &amp; Memo · 03 de Octubre, 2026" />
 <meta name="twitter:description" content="Tenemos el honor de invitarte a celebrar con nosotros nuestra boda. 03 de octubre, 2026." />
-<meta name="twitter:image" content="https://sandyymemo.com/assets/og-preview.jpg" />
+<meta name="twitter:image" content="https://memoanda89.github.io/invitacion/assets/og-preview.jpg" />
 
 <!-- Apple Touch & favicons -->
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
@@ -2936,7 +2936,11 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
 
   function updateConfirmBtn() {
     const phone = document.getElementById('rsvpPhone').value.trim();
-    const ok = selectedAttendees.size > 0 && phone.length > 0;
+    const allSized = [...selectedAttendees].every(n => {
+      const v = Number(attendeeSizes.get(n));
+      return !isNaN(v) && v >= 10;
+    });
+    const ok = selectedAttendees.size > 0 && phone.length > 0 && allSized;
     document.getElementById('rsvpConfirm').disabled = !ok;
   }
 
@@ -2979,6 +2983,7 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
       sizeInput.addEventListener('click', e => e.stopPropagation());
       sizeInput.addEventListener('input', function() {
         attendeeSizes.set(name, this.value.trim());
+        updateConfirmBtn();
       });
       const sizeUnit = document.createElement('span');
       sizeUnit.className = 'rsvp-shoe-unit';
