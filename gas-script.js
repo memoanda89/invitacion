@@ -114,6 +114,7 @@ function handleConfirm(e, callback) {
   var id         = parseInt(e.parameter.id, 10);  // id del invitado (1, 2, 3...)
   var phone      = e.parameter.phone      || '';
   var asistentes = e.parameter.asistentes || '';   // nombres separados por '|'
+  var tallas     = e.parameter.tallas     || '';   // "nombre:talla|nombre:talla"
 
   if (!id || id < 1) {
     return jsonpResponse(callback, { success: false, error: 'ID inválido' });
@@ -126,9 +127,13 @@ function handleConfirm(e, callback) {
   var ss    = SpreadsheetApp.openById(SHEET_ID);
   var sheet = ss.getSheetByName(SHEET_NAME);
 
+  // Formatear tallas: "memo:27, sandy:24"
+  var tallasFormateadas = tallas.replace(/\|/g, ', ');
+
   sheet.getRange(rowNum, 3).setValue(phone);                           // Col C: telefono
   sheet.getRange(rowNum, 4).setValue(asistentes.replace(/\|/g, ', ')); // Col D: asistentes
   sheet.getRange(rowNum, 5).setValue(new Date().toLocaleString('es-MX')); // Col E: fecha
+  sheet.getRange(rowNum, 6).setValue(tallasFormateadas);               // Col F: tallas
 
   return jsonpResponse(callback, { success: true });
 }

@@ -1269,7 +1269,25 @@
   }
   .rsvp-attendee-item input:checked ~ .rsvp-checkmark{ background:var(--camel); border-color:var(--camel) }
   .rsvp-attendee-item input:checked ~ .rsvp-checkmark::after{ opacity:1 }
-  .rsvp-attendee-name{ font-family:var(--serif); font-size:17px; color:var(--espresso) }
+  .rsvp-attendee-name{ font-family:var(--serif); font-size:17px; color:var(--espresso); flex:1 }
+  .rsvp-shoe-size{
+    width:68px; padding:6px 8px;
+    border:1px solid var(--camel-soft);
+    background:transparent;
+    font-size:13px; font-family:var(--sans);
+    color:var(--espresso); text-align:center;
+    border-radius:2px; transition:border-color .2s;
+    -moz-appearance:textfield;
+  }
+  .rsvp-shoe-size::-webkit-inner-spin-button,
+  .rsvp-shoe-size::-webkit-outer-spin-button{ -webkit-appearance:none }
+  .rsvp-shoe-size:focus{ outline:none; border-color:var(--camel) }
+  .rsvp-shoe-size::placeholder{ color:var(--espresso-soft); opacity:.7 }
+  .rsvp-shoe-label{
+    font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--espresso-soft); font-family:var(--sans);
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+  }
   .btn-muted{
     color:var(--espresso-soft); font-size:11px; letter-spacing:.28em;
     text-transform:uppercase; font-family:var(--sans); padding:14px 0;
@@ -2680,6 +2698,7 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
   let guests = [];
   let selectedGroup = null;
   let selectedAttendees = new Set();
+  let attendeeSizes = new Map();   // nombre → talla de zapato
 
   /* ── Pasos ──────────────────────────────────────────────────── */
   const stepEls = {
@@ -2750,6 +2769,7 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
   function selectGroup(group) {
     selectedGroup = group;
     selectedAttendees = new Set(group.members);
+    attendeeSizes = new Map();
     document.getElementById('rsvpPhone').value = '';
     renderAttendees();
     goTo('confirm');
@@ -2783,9 +2803,24 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
       const nameEl = document.createElement('span');
       nameEl.className = 'rsvp-attendee-name';
       nameEl.textContent = name;
+      // — Input de talla de zapato —
+      const sizeWrap = document.createElement('span');
+      sizeWrap.className = 'rsvp-shoe-label';
+      sizeWrap.textContent = 'Talla';
+      const sizeInput = document.createElement('input');
+      sizeInput.type = 'number';
+      sizeInput.min = '14'; sizeInput.max = '35';
+      sizeInput.placeholder = '00';
+      sizeInput.className = 'rsvp-shoe-size';
+      sizeInput.addEventListener('click', e => e.stopPropagation()); // no toggle checkbox
+      sizeInput.addEventListener('input', function() {
+        attendeeSizes.set(name, this.value.trim());
+      });
+      sizeWrap.appendChild(sizeInput);
       label.appendChild(chk);
       label.appendChild(mark);
       label.appendChild(nameEl);
+      label.appendChild(sizeWrap);
       list.appendChild(label);
     });
   }
@@ -2802,7 +2837,11 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
   document.getElementById('rsvpConfirm').addEventListener('click', () => {
     if (!selectedGroup || selectedAttendees.size === 0) return;
     const phone = document.getElementById('rsvpPhone').value.trim();
-    sendConfirmation(selectedGroup.row.id, [...selectedAttendees], phone, () => {
+    // Armar string de tallas: "nombre:talla|nombre:talla"
+    const tallasStr = [...selectedAttendees]
+      .map(n => `${n}:${attendeeSizes.get(n) || '-'}`)
+      .join('|');
+    sendConfirmation(selectedGroup.row.id, [...selectedAttendees], phone, tallasStr, () => {
       goTo('success');
       if (typeof fireConfetti === 'function') fireConfetti();
     });
@@ -2810,17 +2849,18 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
 
   /* ── Declinar ───────────────────────────────────────────────── */
   document.getElementById('rsvpDecline').addEventListener('click', () => {
-    if (selectedGroup) sendConfirmation(selectedGroup.row.id, [], '', () => {});
+    if (selectedGroup) sendConfirmation(selectedGroup.row.id, [], '', '', () => {});
     goTo('declined');
   });
 
   /* ── Confirmación vía JSONP (sin CORS) ──────────────────────── */
-  function sendConfirmation(id, asistentes, phone, cb) {
+  function sendConfirmation(id, asistentes, phone, tallas, cb) {
     if (!GAS_URL) { cb(); return; }
     const cbName = '_rsvpCb' + Date.now();
     const params = new URLSearchParams({
       action: 'confirm', id: String(id),
-      phone: phone, asistentes: asistentes.join('|'), callback: cbName,
+      phone: phone, asistentes: asistentes.join('|'),
+      tallas: tallas, callback: cbName,
     });
     window[cbName] = function(data) {
       delete window[cbName];
