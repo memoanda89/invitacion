@@ -67,6 +67,15 @@ const CONFIG = {
     // Foto grande del hero (página principal)
     hero: 'assets/fotos/s43.jpg',
 
+    // Pool de fotos del hero — se elige una al azar en cada visita
+    heroPool: [
+      'assets/fotos/s34.jpg',
+      'assets/fotos/s38.jpg',
+      'assets/fotos/s25.jpg',
+      'assets/fotos/s26.jpg',
+      'assets/fotos/s39.jpg'
+    ],
+
     // Foto destacada entre Ubicación y Cuenta regresiva
     feature: 'assets/fotos/s26.jpg',
 

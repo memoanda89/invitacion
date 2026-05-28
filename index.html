@@ -1437,18 +1437,18 @@
   }
   .credits-role{
     font-family: var(--sans);
-    font-size: 9px;
-    letter-spacing: .32em;
+    font-size: 11px;
+    letter-spacing: .28em;
     text-transform: uppercase;
     color: var(--camel-deep);
-    opacity: .6;
+    opacity: .7;
   }
   .credits-name{
     font-family: var(--serif);
     font-style: italic;
-    font-size: 15px;
+    font-size: 19px;
     color: var(--espresso);
-    opacity: .8;
+    opacity: .85;
   }
   .credits-name a{
     color: inherit;
@@ -2397,6 +2397,10 @@
   <p class="farewell-signature reveal d2">Sandy &amp; Memo</p>
 </section>
 
+<footer class="footer">
+  <p id="footerDate">03 · Octubre · 2026</p>
+</footer>
+
 <!-- ============ COLABORACIONES ============ -->
 <section class="credits">
   <div class="credits-inner">
@@ -2409,7 +2413,7 @@
         </span>
       </div>
       <div class="credits-item">
-        <span class="credits-role">Video</span>
+        <span class="credits-role">Wedding Planner</span>
         <span class="credits-name">
           <a href="https://www.instagram.com/mauricioalba" target="_blank" rel="noopener">Mauricio Alba</a>
         </span>
@@ -2417,10 +2421,6 @@
     </div>
   </div>
 </section>
-
-<footer class="footer">
-  <p id="footerDate">03 · Octubre · 2026</p>
-</footer>
 
 <canvas id="confettiCanvas"></canvas>
 
@@ -2443,7 +2443,12 @@
   // ── Hero ──
   set('nameA', C.couple.bride);
   set('nameB', C.couple.groom);
-  setAttr('heroPhoto', 'src', C.photos.hero);
+  // Hero: elige foto aleatoria del pool, o usa la foto fija si no hay pool
+  const heroPool = C.photos.heroPool;
+  const heroSrc = (heroPool && heroPool.length)
+    ? heroPool[Math.floor(Math.random() * heroPool.length)]
+    : C.photos.hero;
+  setAttr('heroPhoto', 'src', heroSrc);
   setAttr('heroPhoto', 'alt', `${C.couple.bride} y ${C.couple.groom}`);
   // Fecha del hero: "03 · Octubre · 2026" -> reemplaza por C.date.long
   const heroDate = document.getElementById('heroDate');
