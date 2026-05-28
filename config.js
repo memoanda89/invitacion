@@ -190,7 +190,7 @@ const CONFIG = {
   // COMPARTIR (Open Graph para WhatsApp/Facebook)
   // ─────────────────────────────────────────────────────
   share: {
-    siteUrl: 'https://memoanda89.github.io/invitacion/',
-    ogImage: 'https://memoanda89.github.io/invitacion/assets/og-preview.jpg'
+    siteUrl: 'https://invitacion.blurtaller.com.mx/',
+    ogImage: 'https://invitacion.blurtaller.com.mx/assets/og-preview.jpg'
   }
 };
