@@ -125,29 +125,23 @@ const CONFIG = {
     {
       tag: 'Opción 1',
       name: 'Hotel Marcel',
-      address: '',
-      distance: '',
-      priceFrom: '',
-      priceUnit: '',
-      code: ''
+      address: 'Tomas Padilla 105, Zona Centro',
+      city: 'San Francisco del Rincón, Gto.',
+      phone: '476 149 6535'
     },
     {
       tag: 'Opción 2',
       name: 'Hotel Margarita',
-      address: '',
-      distance: '',
-      priceFrom: '',
-      priceUnit: '',
-      code: ''
+      address: 'Francisco I. Madero 610, Centro',
+      city: 'San Francisco del Rincón, Gto.',
+      phone: '476 744 3947'
     },
     {
       tag: 'Opción 3',
       name: 'Hotel Posada',
-      address: '',
-      distance: '',
-      priceFrom: '',
-      priceUnit: '',
-      code: ''
+      address: 'C. Hermenegildo Bustos 110, Zona Centro',
+      city: 'Purísima de Bustos, Gto.',
+      phone: '476 112 7992'
     }
   ],
 

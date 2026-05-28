@@ -736,7 +736,7 @@
 
   /* ============ DRESS CODE (compacto) ============ */
   .dress{
-    padding: clamp(56px, 8vw, 96px) 0;
+    padding: clamp(32px, 5vw, 56px) 0;
     text-align:center;
     background:var(--linen);
   }
@@ -937,16 +937,19 @@
     margin-bottom:18px;
   }
   .lodging-card .price strong{ color:var(--espresso); font-style:normal; font-weight:500 }
-  .lodging-card .code{
+  .hotel-phone{
     display:inline-block;
-    margin-top:6px;
-    padding:6px 14px;
-    border:1px dashed var(--camel);
-    color:var(--camel-deep);
+    margin-top:10px;
     font-family:var(--sans);
-    font-size:11px;
-    letter-spacing:.18em;
+    font-size:13px;
+    letter-spacing:.12em;
+    color:var(--camel-deep);
+    text-decoration:none;
+    border-bottom:1px solid var(--camel-soft);
+    padding-bottom:2px;
+    transition:border-color .2s, color .2s;
   }
+  .hotel-phone:hover{ color:var(--camel); border-color:var(--camel) }
 
   /* ============ RSVP ============ */
   .rsvp{
@@ -1403,6 +1406,57 @@
     color:var(--espresso);
     margin-top:24px;
   }
+
+  /* Colaboraciones */
+  .credits{
+    padding: 56px 24px 48px;
+    background: var(--linen);
+    border-top: 1px solid var(--camel-soft);
+    text-align: center;
+  }
+  .credits-inner{ max-width: 640px; margin: 0 auto; }
+  .credits-eyebrow{
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: .42em;
+    text-transform: uppercase;
+    color: var(--camel-deep);
+    opacity: .7;
+    margin-bottom: 28px;
+  }
+  .credits-grid{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px 40px;
+  }
+  .credits-item{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .credits-role{
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: var(--camel-deep);
+    opacity: .6;
+  }
+  .credits-name{
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--espresso);
+    opacity: .8;
+  }
+  .credits-name a{
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color .25s, opacity .25s;
+  }
+  .credits-name a:hover{ border-color: var(--camel-soft); opacity: 1 }
 
   /* Footer */
   .footer{
@@ -2149,14 +2203,20 @@
       <div class="lodging-card reveal">
         <p class="tag">Opción 1</p>
         <h3>Hotel Marcel</h3>
+        <p class="addr">Tomas Padilla 105, Zona Centro<br/>San Francisco del Rincón, Gto.</p>
+        <a class="hotel-phone" href="tel:4761496535">476 149 6535</a>
       </div>
       <div class="lodging-card reveal d2">
         <p class="tag">Opción 2</p>
         <h3>Hotel Margarita</h3>
+        <p class="addr">Francisco I. Madero 610, Centro<br/>San Francisco del Rincón, Gto.</p>
+        <a class="hotel-phone" href="tel:4767443947">476 744 3947</a>
       </div>
       <div class="lodging-card reveal d3">
         <p class="tag">Opción 3</p>
         <h3>Hotel Posada</h3>
+        <p class="addr">C. Hermenegildo Bustos 110, Zona Centro<br/>Purísima de Bustos, Gto.</p>
+        <a class="hotel-phone" href="tel:4761127992">476 112 7992</a>
       </div>
     </div>
   </div>
@@ -2337,6 +2397,27 @@
   <p class="farewell-signature reveal d2">Sandy &amp; Memo</p>
 </section>
 
+<!-- ============ COLABORACIONES ============ -->
+<section class="credits">
+  <div class="credits-inner">
+    <p class="credits-eyebrow">Con gratitud</p>
+    <div class="credits-grid" id="creditsGrid">
+      <div class="credits-item">
+        <span class="credits-role">Fotografía</span>
+        <span class="credits-name">
+          <a href="https://www.instagram.com/claudiacampos" target="_blank" rel="noopener">Claudia Campos</a>
+        </span>
+      </div>
+      <div class="credits-item">
+        <span class="credits-role">Video</span>
+        <span class="credits-name">
+          <a href="https://www.instagram.com/mauricioalba" target="_blank" rel="noopener">Mauricio Alba</a>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer class="footer">
   <p id="footerDate">03 · Octubre · 2026</p>
 </footer>
@@ -2430,8 +2511,8 @@
       <div class="lodging-card reveal${i > 0 ? ' d' + (i+1) : ''}">
         <p class="tag">${h.tag}</p>
         <h3>${h.name}</h3>
-        <p class="addr">${h.address}<br/>${h.distance}</p>
-        <span class="code">Código: ${h.code}</span>
+        <p class="addr">${h.address}<br/>${h.city || ''}</p>
+        ${h.phone ? `<a class="hotel-phone" href="tel:${h.phone.replace(/\s/g,'')}">${h.phone}</a>` : ''}
       </div>
     `).join('\n');
   }
