@@ -840,6 +840,24 @@
     text-align:center;
     margin-top:40px;
   }
+  .gallery-credit{
+    text-align:center;
+    margin-top:20px;
+    font-family:var(--sans);
+    font-size:11px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--espresso-soft);
+    opacity:.55;
+  }
+  .gallery-credit a{
+    color:inherit;
+    text-decoration:none;
+    border-bottom:1px solid currentColor;
+    padding-bottom:1px;
+    transition:opacity .2s;
+  }
+  .gallery-credit a:hover{ opacity:1 }
   .btn-link{
     display:inline-flex;
     align-items:center;
@@ -1425,7 +1443,6 @@
   .credits{
     padding: 56px 24px 48px;
     background: var(--linen);
-    border-top: 1px solid var(--camel-soft);
     text-align: center;
   }
   .credits-inner{ max-width: 640px; margin: 0 auto; }
@@ -2195,6 +2212,10 @@
     <div class="gallery-more">
       <a href="galeria.html" class="btn-link">Ver galería completa</a>
     </div>
+    <p class="gallery-credit">
+      Fotografías por
+      <a href="https://www.instagram.com/claudiapcamposphoto?igsh=aTQ3OWlvdWFzZnp5" target="_blank" rel="noopener">Claudia Campos</a>
+    </p>
   </div>
 </section>
 
@@ -2375,20 +2396,15 @@
       <p class="section-subtitle reveal d3">Tu presencia es nuestro mejor regalo. Si además quieres consentirnos, dejamos estas opciones a tu disposición.</p>
     </div>
     <div class="gifts-grid reveal d4" id="giftsGrid">
-      <a class="gift-card" href="https://mesaderegalos.liverpool.com.mx/" target="_blank" rel="noopener">
+      <a class="gift-card" href="https://mesaderegalos.liverpool.com.mx/milistaderegalos/51982798" target="_blank" rel="noopener">
         <div class="gift-brand">Liverpool</div>
         <div class="gift-code">Mesa de regalos</div>
-        <div class="gift-num">No. 51234567</div>
+        <div class="gift-num">No. 51982798</div>
       </a>
-      <a class="gift-card" href="https://www.elpalaciodehierro.com/mesa-de-regalos" target="_blank" rel="noopener">
+      <a class="gift-card" href="https://www.elpalaciodehierro.com/listaregalos?srsltid=AfmBOoqNO4CTCDmwyZlL25a5yrT0Q4Nlu22PkGi8EokubBASkVI6Fu1z#/event/406494" target="_blank" rel="noopener">
         <div class="gift-brand">Palacio de Hierro</div>
         <div class="gift-code">Mesa de regalos</div>
-        <div class="gift-num">No. 89012345</div>
-      </a>
-      <a class="gift-card" href="https://www.amazon.com.mx/wedding/registry" target="_blank" rel="noopener">
-        <div class="gift-brand">Amazon</div>
-        <div class="gift-code">Lista de boda</div>
-        <div class="gift-num">sandyymemo</div>
+        <div class="gift-num">No. 406494</div>
       </a>
     </div>
     <div class="gifts-bank reveal d5" id="bankInfo">
@@ -2422,13 +2438,13 @@
       <div class="credits-item">
         <span class="credits-role">Fotografía</span>
         <span class="credits-name">
-          <a href="https://www.instagram.com/claudiacampos" target="_blank" rel="noopener">Claudia Campos</a>
+          <a href="https://www.instagram.com/claudiapcamposphoto?igsh=aTQ3OWlvdWFzZnp5" target="_blank" rel="noopener">Claudia Campos</a>
         </span>
       </div>
       <div class="credits-item">
         <span class="credits-role">Wedding Planner</span>
         <span class="credits-name">
-          <a href="https://www.instagram.com/mauricioalba" target="_blank" rel="noopener">Mauricio Alba</a>
+          <a href="https://www.instagram.com/bymauricioalba.rentals?igsh=MXQ2N2lrYnEyMDV6aQ==" target="_blank" rel="noopener">Mauricio Alba</a>
         </span>
       </div>
     </div>
@@ -2577,11 +2593,6 @@
         <div class="gift-brand">Palacio de Hierro</div>
         <div class="gift-code">Mesa de regalos</div>
         <div class="gift-num">No. ${C.gifts.palacio.number}</div>
-      </a>
-      <a class="gift-card" href="${C.gifts.amazon.url}" target="_blank" rel="noopener">
-        <div class="gift-brand">Amazon</div>
-        <div class="gift-code">Lista de boda</div>
-        <div class="gift-num">${C.gifts.amazon.username}</div>
       </a>
     `;
   }

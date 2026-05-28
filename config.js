@@ -160,15 +160,11 @@ const CONFIG = {
   gifts: {
     liverpool: {
       number: '51982798',
-      url: 'https://mesaderegalos.liverpool.com.mx/'
+      url: 'https://mesaderegalos.liverpool.com.mx/milistaderegalos/51982798'
     },
     palacio: {
-      number: '89012345',
-      url: 'https://www.elpalaciodehierro.com/mesa-de-regalos'
-    },
-    amazon: {
-      username: 'sandyymemo',
-      url: 'https://www.amazon.com.mx/wedding/registry'
+      number: '406494',
+      url: 'https://www.elpalaciodehierro.com/listaregalos?srsltid=AfmBOoqNO4CTCDmwyZlL25a5yrT0Q4Nlu22PkGi8EokubBASkVI6Fu1z#/event/406494'
     }
   },
 
