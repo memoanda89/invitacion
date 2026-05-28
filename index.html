@@ -1322,6 +1322,22 @@
     font-size:10px; letter-spacing:.2em; text-transform:uppercase;
     color:var(--espresso-soft); font-family:var(--sans);
     display:flex; flex-direction:column; align-items:center; gap:3px;
+    flex-shrink:0;
+  }
+  .rsvp-shoe-unit{
+    font-size:9px; letter-spacing:.15em; text-transform:uppercase;
+    color:var(--camel-deep); opacity:.6; font-family:var(--sans);
+  }
+  .rsvp-shoe-note{
+    font-family:var(--sans);
+    font-size:10px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--espresso-soft);
+    opacity:.55;
+    text-align:right;
+    margin-bottom:6px;
+    font-style:normal;
   }
   .btn-muted{
     color:var(--espresso-soft); font-size:11px; letter-spacing:.28em;
@@ -2901,6 +2917,11 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
   function renderAttendees() {
     const list = document.getElementById('attendeesList');
     list.innerHTML = '';
+    // Nota de unidad sobre la lista
+    const note = document.createElement('p');
+    note.className = 'rsvp-shoe-note';
+    note.textContent = 'Talla de calzado en cm';
+    list.appendChild(note);
     (selectedGroup.members || []).forEach(name => {
       const label = document.createElement('label');
       label.className = 'rsvp-attendee-item';
@@ -2920,17 +2941,23 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
       // — Input de talla de zapato —
       const sizeWrap = document.createElement('span');
       sizeWrap.className = 'rsvp-shoe-label';
-      sizeWrap.textContent = 'Talla';
+      const sizeLabelText = document.createElement('span');
+      sizeLabelText.textContent = 'Talla';
       const sizeInput = document.createElement('input');
       sizeInput.type = 'number';
       sizeInput.min = '14'; sizeInput.max = '35';
       sizeInput.placeholder = '00';
       sizeInput.className = 'rsvp-shoe-size';
-      sizeInput.addEventListener('click', e => e.stopPropagation()); // no toggle checkbox
+      sizeInput.addEventListener('click', e => e.stopPropagation());
       sizeInput.addEventListener('input', function() {
         attendeeSizes.set(name, this.value.trim());
       });
+      const sizeUnit = document.createElement('span');
+      sizeUnit.className = 'rsvp-shoe-unit';
+      sizeUnit.textContent = 'cm';
+      sizeWrap.appendChild(sizeLabelText);
       sizeWrap.appendChild(sizeInput);
+      sizeWrap.appendChild(sizeUnit);
       label.appendChild(chk);
       label.appendChild(mark);
       label.appendChild(nameEl);
