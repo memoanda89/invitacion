@@ -1151,6 +1151,16 @@
   .btn.outline-pearl::before{ background:var(--pearl) }
 
   .form-row{ margin-bottom:22px }
+  .phone-error{
+    display:none;
+    font-family:var(--sans);
+    font-size:11px;
+    color:#C0392B;
+    margin-top:6px;
+    letter-spacing:.01em;
+  }
+  .phone-error.visible{ display:block }
+  .form-row input.invalid{ border-color:#C0392B !important; }
   .form-row label{
     display:block;
     font-family:var(--sans);
@@ -2399,7 +2409,8 @@
         </div>
         <div class="form-row">
           <label for="rsvpPhone">WhatsApp de contacto <em style="font-style:normal;color:var(--camel)">*</em></label>
-          <input type="tel" id="rsvpPhone" placeholder="+52 55 0000 0000" autocomplete="tel" required />
+          <input type="tel" id="rsvpPhone" placeholder="10 dígitos · ej. 4778823560" autocomplete="tel" inputmode="numeric" maxlength="10" required />
+          <span class="phone-error" id="phoneError">Ingresa los 10 dígitos de tu número</span>
         </div>
         <div class="step-nav">
           <button class="step-back" id="rsvpBack">← Volver</button>
@@ -3008,13 +3019,30 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
     updateConfirmBtn();
   }
 
+  function isValidPhone(val) {
+    return /^\d{10}$/.test(val.replace(/\s|-/g, ''));
+  }
+
   function updateConfirmBtn() {
-    const phone = document.getElementById('rsvpPhone').value.trim();
+    const phoneInput = document.getElementById('rsvpPhone');
+    const phoneError = document.getElementById('phoneError');
+    const raw   = phoneInput.value.trim();
+    const valid = isValidPhone(raw);
+
+    // Solo mostrar error si el usuario ya escribió algo
+    if (raw.length > 0) {
+      phoneInput.classList.toggle('invalid', !valid);
+      phoneError.classList.toggle('visible', !valid);
+    } else {
+      phoneInput.classList.remove('invalid');
+      phoneError.classList.remove('visible');
+    }
+
     const allSized = [...selectedAttendees].every(n => {
       const v = Number(attendeeSizes.get(n));
       return !isNaN(v) && v >= 10;
     });
-    const ok = selectedAttendees.size > 0 && phone.length > 0 && allSized;
+    const ok = selectedAttendees.size > 0 && valid && allSized;
     document.getElementById('rsvpConfirm').disabled = !ok;
   }
 
