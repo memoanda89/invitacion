@@ -111,21 +111,31 @@ function handleSearch(e, callback) {
 // ── Confirmación ───────────────────────────────────────────────────────────
 
 function handleConfirm(e, callback) {
-  var id         = parseInt(e.parameter.id, 10);  // id del invitado (1, 2, 3...)
-  var phone      = e.parameter.phone      || '';
-  var asistentes = e.parameter.asistentes || '';   // nombres separados por '|'
-  var tallas     = e.parameter.tallas     || '';   // "nombre:talla|nombre:talla"
+  var invitadoNombre = (e.parameter.invitado || '').trim();
+  var phone          = e.parameter.phone      || '';
+  var asistentes     = e.parameter.asistentes || '';   // nombres separados por '|'
+  var tallas         = e.parameter.tallas     || '';   // "nombre:talla|nombre:talla"
 
-  if (!id || id < 1) {
-    return jsonpResponse(callback, { success: false, error: 'ID inválido' });
+  if (!invitadoNombre) {
+    return jsonpResponse(callback, { success: false, error: 'Nombre de invitado requerido' });
   }
-
-  // +1 porque la fila 1 de la hoja es el encabezado;
-  // el primer invitado (id=1) vive en la fila 2, y así sucesivamente.
-  var rowNum = id + 1;
 
   var ss    = SpreadsheetApp.openById(SHEET_ID);
   var sheet = ss.getSheetByName(SHEET_NAME);
+  var data  = sheet.getDataRange().getValues();
+
+  // Buscar la fila por nombre del invitado (normalizado)
+  var rowNum = -1;
+  for (var i = 1; i < data.length; i++) {
+    if (normalize(String(data[i][0])) === normalize(invitadoNombre)) {
+      rowNum = i + 1; // +1 porque getRange es 1-indexed y fila 1 es cabecera
+      break;
+    }
+  }
+
+  if (rowNum === -1) {
+    return jsonpResponse(callback, { success: false, error: 'Invitado no encontrado: ' + invitadoNombre });
+  }
 
   // Formatear tallas: "memo:27, sandy:24"
   var tallasFormateadas = tallas.replace(/\|/g, ', ');

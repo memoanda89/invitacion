@@ -2364,7 +2364,7 @@
   <div class="container">
     <div class="section-head">
       <p class="eyebrow reveal">Confirmación</p>
-      <h2 class="section-title reveal d1">Sella tu asistencia</h2>
+      <h2 class="section-title reveal d1">Tu presencia nos importa</h2>
       <div class="divider-camel reveal d2"></div>
       <p class="section-subtitle reveal d3">Por favor confirma antes del <strong style="color:var(--camel-deep)" id="rsvpDeadline">1 de septiembre de 2026</strong>.</p>
     </div>
@@ -3095,7 +3095,7 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
     confirmBtn.innerHTML = '<span class="btn-spinner"></span><span>Enviando...</span>';
     confirmBtn.disabled = true;
 
-    sendConfirmation(selectedGroup.row.id, [...selectedAttendees], phone, tallasStr, () => {
+    sendConfirmation(selectedGroup.row.invitado, [...selectedAttendees], phone, tallasStr, () => {
       confirmBtn.innerHTML = originalHTML;
       goTo('success');
       if (typeof fireConfetti === 'function') fireConfetti();
@@ -3104,16 +3104,16 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
 
   /* ── Declinar ───────────────────────────────────────────────── */
   document.getElementById('rsvpDecline').addEventListener('click', () => {
-    if (selectedGroup) sendConfirmation(selectedGroup.row.id, [], '', '', () => {});
+    if (selectedGroup) sendConfirmation(selectedGroup.row.invitado, [], '', '', () => {});
     goTo('declined');
   });
 
   /* ── Confirmación vía JSONP (sin CORS) ──────────────────────── */
-  function sendConfirmation(id, asistentes, phone, tallas, cb) {
+  function sendConfirmation(invitado, asistentes, phone, tallas, cb) {
     if (!GAS_URL) { cb(); return; }
     const cbName = '_rsvpCb' + Date.now();
     const params = new URLSearchParams({
-      action: 'confirm', id: String(id),
+      action: 'confirm', invitado: invitado,
       phone: phone, asistentes: asistentes.join('|'),
       tallas: tallas, callback: cbName,
     });
