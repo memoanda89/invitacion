@@ -538,85 +538,108 @@
     padding: var(--pad-section) 0;
     background: var(--linen);
   }
-  .itinerary-cols{
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 56px;
-    max-width: 900px;
+  /* Timeline vertical — horas a la izquierda, eventos a la derecha */
+  .itin-timeline{
+    max-width: 580px;
     margin: 0 auto;
-  }
-  @media(min-width: 768px){
-    .itinerary-cols{ grid-template-columns: 1fr 1fr; gap: 64px; }
-  }
-  .itin-block-title{
-    font-family: var(--serif);
-    font-style: italic;
-    font-weight: 400;
-    font-size: 22px;
-    color: var(--camel);
-    margin-bottom: 28px;
-    text-align: center;
-    letter-spacing: .02em;
-  }
-  .itin-list{
-    list-style: none;
-    padding: 0;
-    margin: 0;
     position: relative;
   }
-  .itin-list::before{
+  /* Línea vertical central (pasa por los nodos) */
+  .itin-timeline::before{
     content: "";
     position: absolute;
-    left: 80px;
-    top: 8px;
-    bottom: 8px;
+    left: clamp(72px, 14vw, 96px);
+    top: 12px;
+    bottom: 12px;
     width: 1px;
-    background: linear-gradient(to bottom, var(--camel), transparent);
-    opacity: .3;
+    background: linear-gradient(to bottom,
+      transparent,
+      var(--camel) 8%,
+      var(--camel) 92%,
+      transparent);
+    opacity: .28;
   }
-  .itin-list li{
-    display: flex;
+  /* Separador de sección (Ceremonia / Recepción) */
+  .itin-sep{
+    display: grid;
+    grid-template-columns: clamp(72px,14vw,96px) 40px 1fr;
     align-items: center;
-    gap: 0;
-    padding: 10px 0;
+    padding: 20px 0 16px;
+  }
+  .itin-sep-line{ height:1px; background:var(--camel-soft); }
+  .itin-sep-icon{
+    text-align:center;
+    font-family:var(--serif);font-size:17px;
+    color:var(--camel);opacity:.75;
+    position:relative;z-index:2;
+  }
+  .itin-sep-label{
+    font-family:var(--sans);font-size:9px;
+    letter-spacing:.42em;text-transform:uppercase;
+    color:var(--camel-deep);opacity:.6;
+    padding-left:16px;
+  }
+  /* Fila de ítem */
+  .itin-row{
+    display: grid;
+    grid-template-columns: clamp(72px,14vw,96px) 40px 1fr;
+    align-items: center;
+    padding: 11px 0;
     position: relative;
   }
-  .itin-list li::before{
-    content: "";
-    position: absolute;
-    left: 76px;
-    top: 50%;
-    transform: translateY(-50%) rotate(45deg);
-    width: 8px;
-    height: 8px;
-    border: 1px solid var(--camel);
-    background: var(--linen);
-    flex-shrink: 0;
-  }
+  /* Hora */
   .itin-time{
     font-family: var(--serif);
     font-style: italic;
     color: var(--camel-deep);
-    font-size: 13.5px;
-    width: 72px;
-    min-width: 72px;
+    font-size: clamp(13px, 2vw, 15px);
     text-align: right;
     padding-right: 0;
     white-space: nowrap;
     line-height: 1;
   }
-  .itin-dot{
-    width: 24px;
-    flex-shrink: 0;
+  /* Nodo diamante */
+  .itin-node{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
   }
+  .itin-node::before{
+    content: "";
+    width: 8px; height: 8px;
+    border: 1px solid var(--camel);
+    background: var(--linen);
+    transform: rotate(45deg);
+    display: block;
+    transition: background .25s, transform .25s;
+  }
+  .itin-row:hover .itin-node::before{
+    background: var(--camel);
+    transform: rotate(45deg) scale(1.25);
+  }
+  /* Texto del evento */
   .itin-label{
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--espresso-soft);
-    letter-spacing: .02em;
-    line-height: 1.4;
     padding-left: 18px;
+  }
+  .itin-label strong{
+    display: block;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(15px, 2.2vw, 17px);
+    color: var(--espresso);
+    line-height: 1.2;
+    margin-bottom: 2px;
+  }
+  .itin-label span{
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--espresso-soft);
+    opacity: .65;
+    letter-spacing: .02em;
   }
 
   .btn-ghost{
@@ -2102,57 +2125,87 @@
       <h2 class="section-title reveal d1">Itinerario del día</h2>
       <div class="divider-camel reveal d2"></div>
     </div>
-    <div class="itinerary-cols reveal d3">
 
-      <div>
-        <p class="itin-block-title">✦ Ceremonia</p>
-        <ul class="itin-list">
-          <li>
-            <span class="itin-time">6:00 pm</span>
-            <span class="itin-dot"></span>
-            <span class="itin-label">Llegada de invitados</span>
-          </li>
-          <li>
-            <span class="itin-time">6:30 pm</span>
-            <span class="itin-dot"></span>
-            <span class="itin-label">Inicio de ceremonia</span>
-          </li>
-          <li>
-            <span class="itin-time">7:30 pm</span>
-            <span class="itin-dot"></span>
-            <span class="itin-label">Finalización</span>
-          </li>
-        </ul>
+    <div class="itin-timeline reveal d3">
+
+      <!-- Ceremonia -->
+      <div class="itin-sep">
+        <div class="itin-sep-line"></div>
+        <div class="itin-sep-icon">✦</div>
+        <div class="itin-sep-label">Ceremonia</div>
       </div>
-      <div>
-        <p class="itin-block-title">❦ Recepción</p>
-        <ul class="itin-list">
-          <li>
-            <span class="itin-time">8:30 pm</span>
-            <span class="itin-dot"></span>
-            <span class="itin-label">Cóctel de bienvenida</span>
-          </li>
-          <li>
-            <span class="itin-time">9:30 pm</span>
-            <span class="itin-dot"></span>
-            <span class="itin-label">Cena</span>
-          </li>
-          <li>
-            <span class="itin-time">10:30 pm</span>
-            <span class="itin-dot"></span>
-            <span class="itin-label">Brindis y primer vals</span>
-          </li>
-          <li>
-            <span class="itin-time">11:00 pm</span>
-            <span class="itin-dot"></span>
-            <span class="itin-label">Fiesta</span>
-          </li>
-          <li>
-            <span class="itin-time">1:00 am</span>
-            <span class="itin-dot"></span>
-            <span class="itin-label">Cierre</span>
-          </li>
-        </ul>
+
+      <div class="itin-row">
+        <div class="itin-time">6:00 pm</div>
+        <div class="itin-node"></div>
+        <div class="itin-label">
+          <strong>Llegada de invitados</strong>
+          <span>Jardín exterior</span>
+        </div>
+      </div>
+      <div class="itin-row">
+        <div class="itin-time">6:30 pm</div>
+        <div class="itin-node"></div>
+        <div class="itin-label">
+          <strong>Inicio de ceremonia</strong>
+          <span>Jardín principal</span>
+        </div>
+      </div>
+      <div class="itin-row">
+        <div class="itin-time">7:30 pm</div>
+        <div class="itin-node"></div>
+        <div class="itin-label">
+          <strong>Fin de ceremonia</strong>
+          <span>Sesión de fotos</span>
+        </div>
+      </div>
+
+      <!-- Recepción -->
+      <div class="itin-sep">
+        <div class="itin-sep-line"></div>
+        <div class="itin-sep-icon">❦</div>
+        <div class="itin-sep-label">Recepción</div>
+      </div>
+
+      <div class="itin-row">
+        <div class="itin-time">8:30 pm</div>
+        <div class="itin-node"></div>
+        <div class="itin-label">
+          <strong>Cóctel de bienvenida</strong>
+          <span>Terraza exterior</span>
+        </div>
+      </div>
+      <div class="itin-row">
+        <div class="itin-time">9:30 pm</div>
+        <div class="itin-node"></div>
+        <div class="itin-label">
+          <strong>Cena</strong>
+          <span>Salón principal</span>
+        </div>
+      </div>
+      <div class="itin-row">
+        <div class="itin-time">10:30 pm</div>
+        <div class="itin-node"></div>
+        <div class="itin-label">
+          <strong>Brindis y primer vals</strong>
+          <span>Sandy & Memo</span>
+        </div>
+      </div>
+      <div class="itin-row">
+        <div class="itin-time">11:00 pm</div>
+        <div class="itin-node"></div>
+        <div class="itin-label">
+          <strong>Fiesta</strong>
+          <span>Pista de baile</span>
+        </div>
+      </div>
+      <div class="itin-row">
+        <div class="itin-time">1:00 am</div>
+        <div class="itin-node"></div>
+        <div class="itin-label">
+          <strong>Cierre de la noche</strong>
+          <span>Hasta pronto</span>
+        </div>
       </div>
 
     </div>
@@ -2229,7 +2282,7 @@
     <div class="dress-row reveal">
       <p class="dress-label">Código de vestimenta</p>
       <h3 class="dress-title" id="dressTitle">Formal elegante</h3>
-      <p class="dress-note" id="dressNote">Vestido largo o midi · Traje formal oscuro para caballeros · Te pedimos reservar el color blanco para la novia</p>
+      <p class="dress-note" id="dressNote">Vestido largo· Traje formal oscuro para caballeros · Te pedimos reservar el color blanco para la novia</p>
       <div class="dress-divider"></div>
       <p class="no-kids-note reveal">
         Esta celebración está pensada para adultos.<br/>

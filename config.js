@@ -124,7 +124,7 @@ const CONFIG = {
   // ─────────────────────────────────────────────────────
   dressCode: {
     title: 'Formal elegante',
-    description: 'Vestido largo o midi · Traje formal oscuro para caballeros · Te pedimos reservar el color blanco para la novia'
+    description: 'Vestido largo· Traje formal oscuro para caballeros · Te pedimos reservar el color blanco para la novia'
   },
 
   // ─────────────────────────────────────────────────────
