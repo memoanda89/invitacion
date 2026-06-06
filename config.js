@@ -35,10 +35,10 @@ const CONFIG = {
   // CEREMONIA
   // ─────────────────────────────────────────────────────
   ceremony: {
-    title: 'Ceremonia',
+    title: 'Ceremonia & Recepción',
     icon: '✦',
-    time: '6:00 pm',
-    venueName: 'El Tordillo Jardin De Eventos',
+    time: '5:30 pm',
+    venueName: 'El Tordillo Jardín de Eventos',
     addressLine1: 'Lib. Juventino Rosas S/N, 36441',
     addressLine2: 'San Francisco del Rincón, Gto.'
   },
