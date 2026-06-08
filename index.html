@@ -1391,6 +1391,12 @@
     font-size:9px; letter-spacing:.15em; text-transform:uppercase;
     color:var(--camel-deep); opacity:.6; font-family:var(--sans);
   }
+  .rsvp-shoe-min{
+    font-size:9px; color:#C0392B; opacity:0;
+    font-family:var(--sans); white-space:nowrap;
+    transition: opacity .2s;
+  }
+  .rsvp-shoe-min.visible{ opacity:1 }
   .rsvp-shoe-note{
     font-family:var(--sans);
     font-size:10px;
@@ -2980,7 +2986,7 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
 
     const allSized = [...selectedAttendees].every(n => {
       const v = Number(attendeeSizes.get(n));
-      return !isNaN(v) && v >= 10;
+      return !isNaN(v) && v >= 23;
     });
     const ok = selectedAttendees.size > 0 && valid && allSized;
     document.getElementById('rsvpConfirm').disabled = !ok;
@@ -3019,7 +3025,7 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
       sizeLabelText.textContent = 'Talla';
       const sizeInput = document.createElement('input');
       sizeInput.type = 'number';
-      sizeInput.min = '14'; sizeInput.max = '35';
+      sizeInput.min = '23'; sizeInput.max = '35';
       sizeInput.placeholder = '00';
       sizeInput.className = 'rsvp-shoe-size';
       sizeInput.addEventListener('click', e => e.stopPropagation());
@@ -3030,9 +3036,17 @@ window.addEventListener('keydown', e=>{ if(e.key==='Escape' && lightbox.classLis
       const sizeUnit = document.createElement('span');
       sizeUnit.className = 'rsvp-shoe-unit';
       sizeUnit.textContent = 'cm';
+      const sizeMin = document.createElement('span');
+      sizeMin.className = 'rsvp-shoe-min';
+      sizeMin.textContent = 'mín. 23';
+      sizeInput.addEventListener('input', function() {
+        const v = Number(this.value);
+        sizeMin.classList.toggle('visible', this.value.length > 0 && (isNaN(v) || v < 23));
+      });
       sizeWrap.appendChild(sizeLabelText);
       sizeWrap.appendChild(sizeInput);
       sizeWrap.appendChild(sizeUnit);
+      sizeWrap.appendChild(sizeMin);
       label.appendChild(chk);
       label.appendChild(mark);
       label.appendChild(nameEl);
