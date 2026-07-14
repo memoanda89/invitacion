@@ -56,7 +56,7 @@
   { "id": 55, "invitado": "Cesar Roa",              "acompanantes": ["Marina"] },
   { "id": 56, "invitado": "Martin Murgia",          "acompanantes": [] },
   { "id": 57, "invitado": "Ricardo Lopez",          "acompanantes": ["Marcela Perez"] },
-  { "id": 58, "invitado": "Omar Gonzalez",         "acompanantes": ["Ana Ortiz,Maria de la luz Rodriguez"] },
+  { "id": 58, "invitado": "Omar Gonzalez",         "acompanantes": ["Ana Ortiz", "Maria de la luz Rodriguez"] },
   { "id": 59, "invitado": "Cristian Cervera",       "acompanantes": [] },
   { "id": 60, "invitado": "Carlos Lara",            "acompanantes": ["Monica Quiroz"] },
   { "id": 61, "invitado": "Eduardo Medina",         "acompanantes": ["Acompañante"] },
